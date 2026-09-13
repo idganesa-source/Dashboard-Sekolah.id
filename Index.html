@@ -1,0 +1,2007 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+ <title>Dashboard Ganesa Analytics</title>
+ 
+<!-- JQuery & Bootstrap 5 -->
+ <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+ <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ 
+<!-- Select2 (Fitur Ketik Otomatis) -->
+ <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+ <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+ 
+<!-- Google Charts -->
+ <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+ <!-- SheetJS (Pembaca Excel di Browser) -->
+ <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+ <!-- 🔥 LIBRARY UNTUK CETAK PDF & ZIP 🔥 -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+ 
+<style>
+ /* =======================================================
+ 🔥 TEMA UTAMA: LIGHT THEME (BERSIH & PROFESIONAL)
+ ======================================================= */
+ body { background-color: #f8fafc; color: #1e293b; font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
+ .app-wrapper { display: flex; width: 100%; height: 100vh; overflow: hidden; }
+ 
+/* =======================================================
+ 🔥 LOGIN SCREEN: SPLIT 2 KOLOM (MODERN & ELEGAN)
+ ======================================================= */
+ #login-screen {
+ position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+ background-color: #ffffff; display: flex; z-index: 3000; overflow: hidden;
+ }
+ .login-left-panel {
+ width: 50%; height: 100%;
+ background: radial-gradient(circle at 85% 20%, rgba(13, 148, 136, 0.22) 0%, rgba(15, 23, 42, 0) 55%), #0c1017;
+ display: flex; flex-direction: column; justify-content: space-between;
+ padding: 50px 60px; color: #ffffff; position: relative;
+ }
+ .login-left-brand {
+ display: flex; align-items: center; gap: 15px; margin-bottom: 25px;
+ }
+ .login-left-brand img {
+ width: 45px; height: 45px; object-fit: contain;
+ }
+ .login-left-brand .brand-title {
+ font-size: 20px; font-weight: 900; letter-spacing: 2px; color: #ffffff; margin: 0; line-height: 1.1;
+ }
+ .login-left-brand .brand-subtitle {
+ font-size: 10px; font-weight: 700; letter-spacing: 1.5px; color: #2dd4bf; text-transform: uppercase; margin-top: 2px; display: block;
+ }
+ .login-left-content {
+ max-width: 480px; margin-top: 10px;
+ }
+ .welcome-badge {
+ display: inline-block;
+ background: rgba(45, 212, 191, 0.12);
+ color: #2dd4bf;
+ font-size: 11px;
+ font-weight: 700;
+ letter-spacing: 1px;
+ padding: 6px 14px;
+ border-radius: 20px;
+ margin-bottom: 18px;
+ border: 1px solid rgba(45, 212, 191, 0.25);
+ text-transform: uppercase;
+ word-break: break-word;
+ }
+ .login-left-content h1 {
+ font-size: 38px; font-weight: 800; line-height: 1.25; color: #ffffff; margin-bottom: 20px;
+ }
+ .login-left-content h1 span {
+ color: #2dd4bf;
+ }
+ .login-left-content p {
+ font-size: 15px; color: #94a3b8; line-height: 1.6; margin: 0;
+ }
+ .login-left-footer {
+ display: flex; align-items: center; justify-content: flex-end;
+ border-top: 1px solid rgba(255, 255, 255, 0.08); padding-top: 25px;
+ font-size: 13px; color: #64748b;
+ }
+
+ .login-right-panel {
+ width: 50%; height: 100%; background-color: #ffffff;
+ display: flex; align-items: center; justify-content: center;
+ padding: 40px; overflow-y: auto;
+ }
+ .login-form-container {
+ width: 100%; max-width: 380px;
+ }
+ .login-form-container h2 {
+ font-size: 28px; font-weight: 800; color: #0f172a; margin-bottom: 6px;
+ }
+ .login-form-container p.subtext {
+ font-size: 14px; color: #64748b; margin-bottom: 35px;
+ }
+ .form-group-custom {
+ margin-bottom: 20px; text-align: left;
+ }
+ .form-group-custom label {
+ display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 8px;
+ }
+ .login-input-custom {
+ width: 100%; padding: 12px 16px; font-size: 15px; color: #1e293b;
+ background-color: #ffffff; border: 1px solid #cbd5e1; border-radius: 10px;
+ outline: none; transition: all 0.2s ease;
+ }
+ .login-input-custom:focus {
+ border-color: #0d9488; box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
+ }
+ .password-wrapper {
+ position: relative; display: flex; align-items: center;
+ }
+ .password-wrapper input {
+ padding-right: 42px;
+ }
+ .toggle-pass-btn {
+ position: absolute; right: 14px; background: none; border: none;
+ color: #94a3b8; cursor: pointer; font-size: 16px; padding: 0;
+ display: flex; align-items: center; justify-content: center; transition: 0.2s;
+ }
+ .toggle-pass-btn:hover { color: #475569; }
+ .btn-signin-custom {
+ width: 100%; padding: 13px; font-size: 16px; font-weight: 700; color: #0f766e;
+ background-color: #99f6e4; border: none; border-radius: 10px;
+ cursor: pointer; transition: all 0.2s ease; margin-top: 10px;
+ }
+ .btn-signin-custom:hover {
+ background-color: #5eead4; color: #0f766e; transform: translateY(-1px);
+ box-shadow: 0 4px 12px rgba(45, 212, 191, 0.25);
+ }
+ .btn-signin-custom:disabled {
+ background-color: #e2e8f0; color: #94a3b8; cursor: not-allowed; transform: none; box-shadow: none;
+ }
+ #login-error { color: #ef4444; font-size: 13px; font-weight: 600; margin-top: -5px; margin-bottom: 15px; display: none; }
+
+ /* =======================================================
+ 🔥 OPTIMALISASI TAMPILAN MOBILE (HP) - BEBAS LAG & RAPI
+ ======================================================= */
+ @media (max-width: 900px) {
+ #login-screen { flex-direction: column; overflow-y: auto; }
+ .login-left-panel { width: 100%; height: auto; padding: 30px 20px; }
+ .login-left-brand { margin-bottom: 15px; }
+ .login-left-content { margin-top: 10px; }
+ .welcome-badge { margin-top: 5px; margin-bottom: 12px; font-size: 10px; }
+ .login-left-content h1 { font-size: 26px; margin-bottom: 12px; }
+ .login-left-content p { font-size: 13px; }
+ .login-left-footer { padding-top: 15px; margin-top: 20px; }
+ .login-right-panel { width: 100%; height: auto; padding: 30px 20px; }
+ 
+ /* Perbaikan Konten Dashboard HP */
+ .content-container { padding: 15px 12px; }
+ .score-box { padding: 12px; }
+ .score-value { font-size: 28px; }
+ .chart-div { min-height: 280px; }
+ .chart-div-large { min-height: 340px; }
+ .table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+ }
+
+ /* =======================================================
+ 🔥 SIDEBAR (TETAP ELEGAN GELAP - MODERN TIMELINE UI) 🔥
+ ======================================================= */
+ .sidebar { width: 260px; min-width: 260px; background-color: #121417; border-right: 1px solid #1e293b; transition: margin 0.3s ease-in-out; height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; z-index: 1000; margin-left: -260px; }
+ .sidebar.open { margin-left: 0; }
+ 
+ /* Menyatukan styling scrollbar agar cantik dan tidak geser */
+ .sidebar::-webkit-scrollbar, .sidebar-nav::-webkit-scrollbar { width: 6px; }
+ .sidebar::-webkit-scrollbar-thumb, .sidebar-nav::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+ 
+ .sidebar-header { padding: 20px 25px; display: flex; align-items: center; justify-content: space-between; }
+ .sidebar-logo-text { color: #38bdf8; font-size: 24px; font-weight: 900; letter-spacing: 1px; }
+ 
+ /* Perbaikan Overflow: Mencegah scrollbar bawaan yang tebal */
+ .sidebar-nav { padding: 10px 15px; flex-grow: 1; overflow-y: auto; overflow-x: hidden; }
+ .sidebar-nav .nav-link { color: #94a3b8; padding: 12px 15px; border-radius: 8px; margin-bottom: 4px; font-weight: 500; font-size: 14px; display: flex; align-items: center; border: 1px solid transparent; width: 100%; transition: 0.2s; background: transparent; text-align: left; }
+ .sidebar-nav .nav-link:hover { color: #e2e8f0; background: rgba(255,255,255,0.03); }
+ 
+ /* Tombol Active Utama (Glow Effect) */
+ .sidebar-nav .nav-link.active { 
+     background: linear-gradient(90deg, rgba(45, 212, 191, 0.15) 0%, rgba(15, 23, 42, 0) 100%);
+     border: 1px solid rgba(45, 212, 191, 0.3);
+     box-shadow: inset 0 0 12px rgba(45, 212, 191, 0.1), 0 0 8px rgba(45, 212, 191, 0.05);
+     color: #2dd4bf !important; 
+     font-weight: 600; 
+ }
+ 
+ .nav-icon { display: inline-flex; width: 26px; font-size: 16px; align-items: center; opacity: 0.7; transition: 0.2s; }
+ .nav-link.active .nav-icon { opacity: 1; filter: drop-shadow(0 0 2px rgba(45,212,191,0.5)); }
+ .dropdown-icon { margin-left: auto; font-size: 11px; transition: transform 0.3s; opacity: 0.5; }
+ .nav-link[aria-expanded="true"] .dropdown-icon { transform: rotate(180deg); }
+ 
+ /* TIMELINE SUBMENU */
+ .nav-submenu { padding-left: 0; margin-top: 5px; }
+ .category-title { font-size: 10px; font-weight: 800; margin: 15px 0 8px 15px; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9; }
+ 
+ .text-yellow { color: #facc15; }
+ .text-green { color: #34d399; }
+ .text-blue { color: #60a5fa; }
+ .text-red { color: #f87171; }
+ .text-purple { color: #c084fc; }
+ 
+ .submenu-group { position: relative; margin-left: 22px; padding-left: 15px; margin-bottom: 15px; }
+ 
+ /* Garis Vertikal */
+ .submenu-group::before {
+     content: '';
+     position: absolute;
+     left: 0;
+     top: 15px;
+     bottom: 18px;
+     width: 1px;
+ }
+ .group-yellow::before { background-color: rgba(250, 204, 21, 0.2); }
+ .group-green::before { background-color: rgba(52, 211, 153, 0.2); }
+ .group-blue::before { background-color: rgba(96, 165, 250, 0.2); }
+ .group-red::before { background-color: rgba(248, 113, 113, 0.2); }
+ .group-purple::before { background-color: rgba(192, 132, 252, 0.2); }
+ 
+ .submenu-group .nav-link {
+     position: relative;
+     padding: 8px 10px;
+     font-size: 13px;
+     color: #94a3b8;
+     font-weight: 500;
+     border: none;
+     background: transparent;
+     box-shadow: none;
+ }
+ 
+ .submenu-group .nav-link .icon { width: 24px; display: inline-block; font-size: 15px; opacity: 0.6; transition: 0.2s; }
+ 
+ /* Titik (Dot) pada Menu */
+ .submenu-group .nav-link::before {
+     content: '';
+     position: absolute;
+     left: -17px;
+     top: 50%;
+     transform: translateY(-50%);
+     width: 5px;
+     height: 5px;
+     border-radius: 50%;
+     transition: 0.2s ease-in-out;
+ }
+ 
+ /* Warna Hover & Active tiap Kategori */
+ .group-yellow .nav-link::before { background-color: #facc15; box-shadow: 0 0 0px #facc15; opacity: 0.4; }
+ .group-yellow .nav-link:hover::before, .group-yellow .nav-link.active::before { opacity: 1; box-shadow: 0 0 8px #facc15; }
+ .group-yellow .nav-link.active { color: #facc15 !important; }
+ .group-yellow .nav-link.active .icon { opacity: 1; filter: drop-shadow(0 0 2px rgba(250,204,21,0.5)); }
+
+ .group-green .nav-link::before { background-color: #34d399; box-shadow: 0 0 0px #34d399; opacity: 0.4; }
+ .group-green .nav-link:hover::before, .group-green .nav-link.active::before { opacity: 1; box-shadow: 0 0 8px #34d399; }
+ .group-green .nav-link.active { color: #34d399 !important; }
+ .group-green .nav-link.active .icon { opacity: 1; filter: drop-shadow(0 0 2px rgba(52,211,153,0.5)); }
+
+ .group-blue .nav-link::before { background-color: #60a5fa; box-shadow: 0 0 0px #60a5fa; opacity: 0.4; }
+ .group-blue .nav-link:hover::before, .group-blue .nav-link.active::before { opacity: 1; box-shadow: 0 0 8px #60a5fa; }
+ .group-blue .nav-link.active { color: #60a5fa !important; }
+ .group-blue .nav-link.active .icon { opacity: 1; filter: drop-shadow(0 0 2px rgba(96,165,250,0.5)); }
+
+ .group-red .nav-link::before { background-color: #f87171; box-shadow: 0 0 0px #f87171; opacity: 0.4; }
+ .group-red .nav-link:hover::before, .group-red .nav-link.active::before { opacity: 1; box-shadow: 0 0 8px #f87171; }
+ .group-red .nav-link.active { color: #f87171 !important; }
+ .group-red .nav-link.active .icon { opacity: 1; filter: drop-shadow(0 0 2px rgba(248,113,113,0.5)); }
+
+ .group-purple .nav-link::before { background-color: #c084fc; box-shadow: 0 0 0px #c084fc; opacity: 0.4; }
+ .group-purple .nav-link:hover::before, .group-purple .nav-link.active::before { opacity: 1; box-shadow: 0 0 8px #c084fc; }
+ .group-purple .nav-link.active { color: #c084fc !important; }
+ .group-purple .nav-link.active .icon { opacity: 1; filter: drop-shadow(0 0 2px rgba(192,132,252,0.5)); }
+
+ /* MAIN KONTEN & TOP NAV BAR */
+ .main-wrapper { flex-grow: 1; height: 100vh; overflow-y: auto; background-color: #f8fafc; transition: width 0.3s ease-in-out; display: flex; flex-direction: column; scroll-behavior: smooth; }
+ .top-navbar { display: flex; align-items: center; justify-content: space-between; padding: 15px 25px; background-color: #ffffff; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #e2e8f0; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+ .hamburger-btn { background: none; border: none; color: #1e293b; font-size: 24px; cursor: pointer; margin-right: 20px; transition: 0.2s; }
+ .top-title { font-size: 18px; font-weight: 600; color: #1e293b; margin: 0; }
+ 
+ .btn-action-group { display: flex; gap: 10px; }
+ .btn-top { padding: 6px 12px; font-size: 13px; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 5px; transition: 0.2s; white-space: nowrap; }
+ .btn-back { background-color: #10b981; color: white; border: 1px solid #059669; }
+ .btn-back:hover { background-color: #059669; color: white; }
+
+ /* LOGOUT BUTTON SIDEBAR DIBAWAH */
+ .btn-logout-sidebar { background-color: transparent; border: 1px solid #ef4444; color: #ef4444; padding: 6px 12px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: flex; align-items: center; justify-content: center; font-size: 14px;}
+ .btn-logout-sidebar:hover { background-color: #ef4444; color: white; }
+
+ /* PANEL HEADER & KARTU BERSIH (PUTIH) */
+ .content-container { padding: 20px 25px; flex-grow: 1; }
+ .school-header-panel { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px 25px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+ .school-info { display: flex; align-items: center; gap: 15px; }
+ .school-logo { width: 55px; height: 55px; object-fit: contain; border-radius: 8px; background-color: #f1f5f9; padding: 2px; border: 1px solid #cbd5e1;}
+ .school-text { display: flex; flex-direction: column; }
+ .school-name { font-size: 18px; font-weight: 700; color: #0f172a; margin: 0; }
+ .school-subtext { font-size: 13px; color: #64748b; margin-top: 2px;}
+ .assessment-title { font-size: 15px; font-weight: 600; color: #0d9488; text-align: right; padding-left: 20px; border-left: 2px solid #e2e8f0; line-height: 1.4;}
+ 
+ .dashboard-card { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+ .chart-header { display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: bold; color: #0f172a; margin-bottom: 20px; border-bottom: 1px solid #f1f5f9; padding-bottom: 10px; text-transform: uppercase; gap: 10px; flex-wrap: wrap;}
+ 
+ .clickable-card { cursor: pointer; transition: all 0.2s ease; border: 1px solid #e2e8f0; }
+ .clickable-card:hover { transform: translateY(-4px); box-shadow: 0 10px 20px rgba(0,0,0,0.08); border-color: #0d9488; }
+ .detail-hint { font-size: 11px; color: #0d9488; font-weight: 600; opacity: 0; transition: 0.2s; background: rgba(13, 148, 136, 0.1); padding: 3px 10px; border-radius: 12px; text-transform: none; white-space: nowrap;}
+ .clickable-card:hover .detail-hint { opacity: 1; }
+
+ .score-box { background-color: #ffffff; border: 1px solid #e2e8f0; border-radius: 12px; padding: 15px; height: 100%; display: flex; flex-direction: column; justify-content: center; position: relative; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);}
+ .score-title { font-size: 12px; color: #64748b; font-weight: 600; text-transform: uppercase;}
+ .score-value { font-size: 36px; font-weight: bold; color: #0f172a; line-height: 1; }
+ .chart-div { width: 100%; min-height: 320px; }
+ .chart-div-large { width: 100%; min-height: 420px; } 
+
+ .table-container { overflow-x: auto; max-height: 500px; border: 1px solid #e2e8f0; border-radius: 8px;}
+ .custom-table { width: 100%; border-collapse: collapse; font-size: 13px; } 
+ .custom-table th { background-color: #f1f5f9; color: #0f172a; padding: 12px 10px; border: 1px solid #e2e8f0; text-align: center; position: sticky; top: 0; z-index: 10; white-space: nowrap;}
+ .custom-table td { padding: 10px; border: 1px solid #e2e8f0; text-align: center; color: #334155; vertical-align: middle; white-space: nowrap;}
+ .custom-table tr:nth-child(even) td { background-color: #f8fafc; }
+ .custom-table tr:nth-child(odd) td { background-color: #ffffff; }
+ .custom-table td.text-start { text-align: left; }
+ .cell-score { font-weight: bold; color: #0f172a !important; }
+
+ #loading { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(255,255,255,0.95); padding: 30px 50px; border-radius: 12px; border: 1px solid #e2e8f0; z-index: 2000; text-align: center; display: none; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);}
+ 
+ /* =========================================================================
+ 🔥 PERBAIKAN SELECT2 TOTAL (SPESIFISITAS TEGAS UNTUK SEMUA ITEM OPTION)
+ ========================================================================= */
+ .select2-container--default .select2-selection--single { background-color: #ffffff !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; height: 40px !important; outline: none; }
+ .select2-container--default .select2-selection--single .select2-selection__rendered { color: #1e293b !important; line-height: 38px !important; padding-left: 12px !important; }
+ .select2-container--default .select2-selection--single .select2-selection__arrow { height: 38px !important; }
+ .select2-dropdown { background-color: #ffffff !important; border: 1px solid #cbd5e1 !important; border-radius: 8px !important; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+ .select2-search--dropdown .select2-search__field { background-color: #f8fafc !important; color: #1e293b !important; border: 1px solid #cbd5e1 !important; border-radius: 6px; outline: none; }
+ .select2-container .select2-results__option, .select2-container--default .select2-results__option { color: #1e293b !important; background-color: #ffffff !important; padding: 8px 12px !important; font-weight: 500 !important; }
+ .select2-container .select2-results__option--highlighted, .select2-container--default .select2-results__option--highlighted, .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable, .select2-container--default .select2-results__option--highlighted[aria-selected], .select2-container--default .select2-results__option[aria-selected="true"], .select2-container--default .select2-results__option--selected { background-color: #0d9488 !important; color: #ffffff !important; font-weight: 600 !important; }
+ .select2-results__option[aria-selected=true]:hover, .select2-container--default .select2-results__option[aria-selected=true]:hover { background-color: #0f766e !important; color: #ffffff !important; }
+ .select2-container--default .select2-selection--single .select2-selection__clear { color: #64748b !important; font-size: 20px !important; font-weight: bold !important; margin-right: 15px !important; margin-top: 2px !important; }
+
+ .btn-reset-filter { background-color: #f1f5f9; border: 1px solid #cbd5e1; color: #475569; font-size: 11px; font-weight: bold; border-radius: 4px; padding: 2px 8px; cursor: pointer; transition: 0.2s; white-space: nowrap; }
+ .btn-reset-filter:hover { background-color: #ef4444; color: white; border-color: #ef4444; }
+ .btn-tampil-semua { background-color: #f1f5f9; border: 1px solid #cbd5e1; color: #0f172a; font-size: 12px; font-weight: bold; border-radius: 6px; padding: 4px 12px; cursor: pointer; transition: 0.2s; text-transform: none; white-space: nowrap; }
+ .btn-tampil-semua:hover { background-color: #0f172a; color: #ffffff; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+
+ /* =======================================================
+ 🔥 TEMA LAPORAN INDIVIDU (PDF PAGE - DESAIN COMPACT) 🔥
+ ======================================================= */
+ .pdf-page { background-color: #ffffff; color: #1a1c20; padding: 45px 55px; font-family: 'Arial', sans-serif; width: 210mm; height: 297mm; max-width: 100%; margin: 0 auto 25px auto; box-shadow: 0 10px 30px rgba(0,0,0,0.08); box-sizing: border-box; position: relative; page-break-after: always; overflow: hidden; }
+ @media print { body { background-color: #ffffff !important; } .no-print, .top-navbar, .sidebar, #login-screen, .btn-action-group, .dashboard-card:not(#laporan-isi) { display: none !important; } .pdf-page { box-shadow: none !important; margin: 0 !important; width: 100% !important; min-height: 100vh !important; page-break-after: always !important; page-break-inside: avoid !important; padding: 15mm 15mm !important; } }
+ .pr-header { display: flex; align-items: flex-start; border-bottom: 2px solid #000; padding-bottom: 15px; margin-bottom: 15px; }
+ .pr-header img { width: auto; height: 60px; margin-right: 15px; object-fit: contain; }
+ .pr-header-text h1 { font-size: 20px; font-weight: bold; color: #000; margin: 0 0 5px 0; letter-spacing: 0.5px; }
+ .pr-header-text p { font-size: 11px; color: #555; margin: 0; line-height: 1.4; }
+ .pr-biodata-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 40px; margin-bottom: 20px; font-size: 11px; color: #000; font-weight: bold; }
+ .pr-bio-row { display: grid; grid-template-columns: 90px 10px 1fr; }
+ .pr-section-title-new { font-size: 12px; font-weight: bold; color: #000; text-transform: uppercase; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: flex-end;}
+ .pr-text { font-size: 11px; color: #333; line-height: 1.5; text-align: justify; margin: 0;}
+ .pr-text-sm { font-size: 11px; color: #333; line-height: 1.5; text-align: justify; margin: 0;}
+ .pr-text-xs { font-size: 10px; color: #555; line-height: 1.4; margin: 0;}
+ .pr-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 5px;}
+ .pr-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 5px;}
+ .pr-table-compact { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 10px; margin-top: 10px; }
+ .pr-table-compact th, .pr-table-compact td { border: 1px solid #ddd; padding: 6px 8px; text-align: left; vertical-align: top;}
+ .pr-table-compact th { background-color: #f9f9f9; font-weight: bold; color: #000; }
+ .text-bold { font-weight: bold; color: #000; }
+ .flex-between { display: flex; justify-content: space-between; align-items: center; }
+
+ @media (max-width: 768px) {
+    .top-navbar { padding: 12px 15px; } .hamburger-btn { margin-right: 12px; font-size: 22px; } .top-title { font-size: 16px; } .btn-action-group { gap: 6px; } .btn-top { padding: 8px 10px; font-size: 16px; } .btn-top span { display: none; } 
+    .school-header-panel { flex-direction: column; align-items: flex-start; gap: 12px; padding: 15px; } .assessment-title { text-align: left; padding-left: 0; border-left: none; border-top: 1px solid #e2e8f0; padding-top: 10px; width: 100%; font-size: 14px; } .detail-hint { opacity: 1; } .pdf-page { padding: 20px 15px; } .pr-biodata-grid { grid-template-columns: 1fr; gap: 5px;} .pr-grid-3, .pr-grid-2 { grid-template-columns: 1fr; gap: 10px; }
+ }
+ 
+ /* STYLE LOG TRACKER */
+ .log-container { height: 350px; overflow-y: auto; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; font-size: 13px; line-height: 1.5;}
+ .log-entry { margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed #cbd5e1; }
+ .log-entry:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+ 
+ /* =======================================================
+ 🔥 FIX: AUTO-RESIZE SIDEBAR SAAT DROPDOWN TERBUKA 🔥
+ ======================================================= */
+ .sidebar-nav { min-height: 0; }
+ .sidebar-nav:has(.collapse.show) .nav-link { font-size: 12px; padding: 8px 15px; margin-bottom: 2px; }
+ .sidebar-nav:has(.collapse.show) .submenu-group .nav-link { font-size: 11px; padding: 4px 10px; }
+ .sidebar-nav:has(.collapse.show) .category-title { font-size: 9px; margin: 8px 0 4px 15px; }
+ .sidebar-nav:has(.collapse.show) .submenu-group { margin-bottom: 8px; }
+ .sidebar-nav:has(.collapse.show) .nav-icon { font-size: 14px; }
+ .sidebar-nav:has(.collapse.show) .submenu-group .nav-link .icon { width: 20px; font-size: 13px; }
+ </style>
+</head>
+<body>
+
+ <!-- 🔥 MODAL PILIH HALAMAN PDF 🔥 -->
+ <div class="modal fade" id="modalDownloadPDF" tabindex="-1" aria-labelledby="modalDownloadPDFLabel" aria-hidden="true">
+ <div class="modal-dialog modal-dialog-centered">
+ <div class="modal-content" style="background-color: #ffffff; color: #1e293b; border: 1px solid #cbd5e1; border-radius: 12px;">
+ <div class="modal-header" style="border-bottom: 1px solid #e2e8f0;">
+ <h5 class="modal-title" id="modalDownloadPDFLabel">📥 Opsi Download PDF</h5>
+ <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+ </div>
+ <div class="modal-body">
+ <p style="font-size: 13px; color: #475569; margin-bottom: 15px;">Pilih halaman yang ingin disertakan ke dalam file PDF:</p>
+ <div class="form-check mb-2">
+ <input class="form-check-input page-checkbox" type="checkbox" value="0" id="chkPage1" checked style="cursor: pointer;">
+ <label class="form-check-label" for="chkPage1" style="font-size: 14px; font-weight: 500; cursor: pointer;">Halaman 1 (Cover Biodata)</label>
+ </div>
+ <div class="form-check mb-2">
+ <input class="form-check-input page-checkbox" type="checkbox" value="1" id="chkPage2" checked style="cursor: pointer;">
+ <label class="form-check-label" for="chkPage2" style="font-size: 14px; font-weight: 500; cursor: pointer;">Halaman 2 (Isi Laporan Bagian 1)</label>
+ </div>
+ <div class="form-check mb-2">
+ <input class="form-check-input page-checkbox" type="checkbox" value="2" id="chkPage3" checked style="cursor: pointer;">
+ <label class="form-check-label" for="chkPage3" style="font-size: 14px; font-weight: 500; cursor: pointer;">Halaman 3 (Isi Laporan Bagian 2 - Jika Ada)</label>
+ </div>
+ </div>
+ <div class="modal-footer" style="border-top: 1px solid #e2e8f0;">
+ <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Batal</button>
+ <button type="button" class="btn btn-info btn-sm" id="btn-download-individu" onclick="prosesDownloadPDFIndividu()" style="background-color: #0ea5e9; border: none; color: white; display: none;">Download 1 Siswa</button>
+ <button type="button" class="btn btn-primary btn-sm" onclick="prosesDownloadPDFZip()" style="background-color: #f59e0b; border: none; color: white;">Download ZIP Kelas</button>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- 🔥 LOGIN SCREEN: SPLIT 2 KOLOM 🔥 -->
+ <div id="login-screen">
+ <div class="login-left-panel">
+ <div class="login-left-brand">
+ <img src="https://lh3.googleusercontent.com/d/1Wqpp9soE46uHXkCdJiPF3pzbt8QGTypJ" alt="Logo Ganesa">
+ <div>
+ <h2 class="brand-title">GANESA</h2>
+ <span class="brand-subtitle">Gerbang Asesmen Indonesia</span>
+ </div>
+ </div>
+
+ <div class="login-left-content">
+ <span class="welcome-badge">✨ WELCOME TO DASHBOARD SEKOLAH</span>
+ <h1>Kenali potensi setiap siswa, <span>arahkan masa depannya.</span></h1>
+ <p>Memetakan minat, bakat, gaya belajar, dan kepribadian peserta didik secara holistik.</p>
+ </div>
+
+ <div class="login-left-footer">
+ <div>© 2026 AKTARA</div>
+ </div>
+ </div>
+
+ <div class="login-right-panel">
+ <div class="login-form-container">
+ <h2>Admin sign in</h2>
+ <p class="subtext">Kelola data asesmen, laporan psikologi, & profil pelajar</p>
+
+ <div id="login-error"></div>
+
+ <div class="form-group-custom">
+ <label for="input-email">Email</label>
+ <input type="email" id="input-email" class="login-input-custom" placeholder="contoh@sekolah.id" autocomplete="off" onkeypress="handleEnter(event)">
+ </div>
+
+ <div class="form-group-custom">
+ <label for="input-password">Password</label>
+ <div class="password-wrapper">
+ <input type="password" id="input-password" class="login-input-custom" placeholder="••••••••" autocomplete="off" onkeypress="handleEnter(event)">
+ <button type="button" class="toggle-pass-btn" onclick="togglePasswordVisibility()" title="Lihat/Sembunyikan Password">👁️</button>
+ </div>
+ </div>
+
+ <button class="btn-signin-custom" id="btn-login" onclick="doLogin()">Sign In</button>
+ </div>
+ </div>
+ </div>
+
+ <!-- LOADING SCREEN -->
+ <div id="loading">
+ <div class="spinner-border text-teal mb-3" role="status" style="color: #0d9488;"></div>
+ <br><span style="color:#334155; font-weight:600;">Memuat Data <span id="load-sekolah"></span>...</span>
+ </div>
+
+ <div class="app-wrapper" id="main-content" style="display:none;">
+ 
+<!-- SIDEBAR MENU -->
+<nav id="sidebar" class="sidebar">
+  <div class="sidebar-header"><div class="sidebar-logo-text">GANESA</div></div>
+  
+  <div class="sidebar-nav nav flex-column" id="v-pills-tab" role="tablist">
+    
+    <!-- 1. DASHBOARD UTAMA -->
+    <button class="nav-link active" id="menu-ringkasan" data-bs-toggle="pill" data-bs-target="#pills-ringkasan" type="button">
+      <span class="nav-icon">㗊</span> Dashboard Utama
+    </button>
+    
+    <!-- 2. REPORT ASESMEN -->
+    <div id="wrap-report" style="width: 100%; margin-top: 5px;">
+      <a class="nav-link collapsed" data-bs-toggle="collapse" href="#collapseReportAsesmen" style="font-weight:600;">
+        <div><span class="nav-icon">📁</span> Report Asesmen</div>
+        <span class="dropdown-icon">▼</span>
+      </a>
+      
+      <div class="collapse" id="collapseReportAsesmen">
+        <div class="nav-submenu d-flex flex-column">
+          <!-- KELOMPOK 1: POTENSI & KEPRIBADIAN -->
+          <div class="category-title text-yellow">POTENSI & KEPRIBADIAN</div>
+          <div class="submenu-group group-yellow">
+            <button class="nav-link" id="menu-minatbakat" data-bs-toggle="pill" data-bs-target="#pills-minatbakat" type="button"><span class="icon">🎯</span> Minat Bakat</button>
+            <button class="nav-link" id="menu-kepribadian" data-bs-toggle="pill" data-bs-target="#pills-kepribadian" type="button"><span class="icon">👥</span> Kepribadian</button>
+            <button class="nav-link" id="menu-kecerdasan" data-bs-toggle="pill" data-bs-target="#pills-kecerdasan" type="button"><span class="icon">🧠</span> Kec. Majemuk</button>
+            <button class="nav-link" id="menu-profil_kecerdasan" data-bs-toggle="pill" data-bs-target="#pills-profil_kecerdasan" type="button"><span class="icon">💡</span> Profil Kecerdasan</button>
+            <button class="nav-link" id="menu-gaya" data-bs-toggle="pill" data-bs-target="#pills-gaya" type="button"><span class="icon">🎧</span> Gaya Belajar</button>
+            <button class="nav-link" id="menu-ketahanan" data-bs-toggle="pill" data-bs-target="#pills-ketahanan_diri" type="button"><span class="icon">🛡️</span> Ketahanan Diri</button>
+            <button class="nav-link" id="menu-disc" data-bs-toggle="pill" data-bs-target="#pills-disc" type="button"><span class="icon">🎯</span> Hasil DISC</button>
+            <button class="nav-link" id="menu-papi" data-bs-toggle="pill" data-bs-target="#pills-papi" type="button"><span class="icon">🧩</span> Papi Kostick</button>
+          </div>
+
+          <!-- KELOMPOK 2: KESEJAHTERAAN PSIKOLOGI -->
+          <div class="category-title text-green">KESEJAHTERAAN PSIKOLOGI</div>
+          <div class="submenu-group group-green">
+            <button class="nav-link" id="menu-kemandirian" data-bs-toggle="pill" data-bs-target="#pills-kemandirian" type="button"><span class="icon">🛡️</span> Kemandirian</button>
+            <button class="nav-link" id="menu-penguasaan" data-bs-toggle="pill" data-bs-target="#pills-penguasaan" type="button"><span class="icon">🌍</span> Penguasaan Lingkungan</button>
+            <button class="nav-link" id="menu-pertumbuhan" data-bs-toggle="pill" data-bs-target="#pills-pertumbuhan" type="button"><span class="icon">🌳</span> Pertumbuhan Pribadi</button>
+            <button class="nav-link" id="menu-hubungan" data-bs-toggle="pill" data-bs-target="#pills-hubungan" type="button"><span class="icon">🤝</span> Hubungan Positif</button>
+            <button class="nav-link" id="menu-tujuan" data-bs-toggle="pill" data-bs-target="#pills-tujuan" type="button"><span class="icon">🎯</span> Tujuan Hidup</button>
+            <button class="nav-link" id="menu-penerimaan" data-bs-toggle="pill" data-bs-target="#pills-penerimaan" type="button"><span class="icon">🫂</span> Penerimaan Diri</button>
+          </div>
+
+          <!-- KELOMPOK 3: KEBIASAAN BELAJAR -->
+          <div class="category-title text-blue">KEBIASAAN BELAJAR</div>
+          <div class="submenu-group group-blue">
+            <button class="nav-link" id="menu-pr" data-bs-toggle="pill" data-bs-target="#pills-pr" type="button"><span class="icon">🏠</span> Pekerjaan Rumah</button>
+            <button class="nav-link" id="menu-waktu" data-bs-toggle="pill" data-bs-target="#pills-waktu" type="button"><span class="icon">🕒</span> Alokasi Waktu</button>
+            <button class="nav-link" id="menu-membaca" data-bs-toggle="pill" data-bs-target="#pills-membaca" type="button"><span class="icon">📖</span> Membaca & Mencatat</button>
+            <button class="nav-link" id="menu-prosedur" data-bs-toggle="pill" data-bs-target="#pills-prosedur" type="button"><span class="icon">⚙️</span> Prosedur Periode</button>
+            <button class="nav-link" id="menu-konsentrasi" data-bs-toggle="pill" data-bs-target="#pills-konsentrasi" type="button"><span class="icon">🎯</span> Konsentrasi</button>
+          </div>
+
+          <!-- KELOMPOK 4: LINGKUNGAN KELUARGA -->
+          <div class="category-title text-red">LINGKUNGAN KELUARGA</div>
+          <div class="submenu-group group-red">
+            <button class="nav-link" id="menu-cara_mendidik" data-bs-toggle="pill" data-bs-target="#pills-cara_mendidik" type="button"><span class="icon">👨‍👩‍👧</span> Cara Mendidik</button>
+            <button class="nav-link" id="menu-relasi" data-bs-toggle="pill" data-bs-target="#pills-relasi" type="button"><span class="icon">💞</span> Relasi Keluarga</button>
+            <button class="nav-link" id="menu-suasana_rumah" data-bs-toggle="pill" data-bs-target="#pills-suasana_rumah" type="button"><span class="icon">🏡</span> Suasana Rumah</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. RINGKASAN INDIVIDU -->
+    <button class="nav-link" id="menu-laporan-individu" data-bs-toggle="pill" data-bs-target="#pills-laporan-individu" type="button" style="margin-top: 5px;">
+      <span class="nav-icon">👤</span> Ringkasan Individu
+    </button>
+
+    <!-- 4. PENGATURAN ADMIN (Dropdown Manajemen Sistem - Hanya Super Admin) -->
+    <div id="admin-menu-section" style="display: none; width: 100%; margin-top: 5px;">
+      <a class="nav-link collapsed" data-bs-toggle="collapse" href="#collapseManajemenSistem" style="font-weight:600;">
+        <div><span class="nav-icon">⚙️</span> Manajemen Sistem</div>
+        <span class="dropdown-icon">▼</span>
+      </a>
+      <div class="collapse" id="collapseManajemenSistem">
+        <div class="nav-submenu d-flex flex-column">
+          <div class="submenu-group group-purple" style="margin-top: 10px;">
+            <button class="nav-link" id="menu-upload" data-bs-toggle="pill" data-bs-target="#pills-upload" type="button"><span class="icon">📂</span> Upload Data</button>
+            <button class="nav-link" id="menu-buat-akun" data-bs-toggle="pill" data-bs-target="#pills-buat-akun" type="button"><span class="icon">🏫</span> Buat Akun Sekolah</button>
+            <button class="nav-link" id="menu-buat-role" data-bs-toggle="pill" data-bs-target="#pills-buat-role" type="button"><span class="icon">🛡️</span> Buat Role Staff</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  
+  <!-- PROFIL FOOTER SIDEBAR -->
+  <div class="sidebar-profile mt-auto p-3 border-top" style="border-color: rgba(255,255,255,0.05) !important; background: rgba(0,0,0,0.2);">
+      <div class="d-flex align-items-center gap-2">
+          <div style="width: 38px; height: 38px; min-width: 38px; background: #1e293b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; border: 1px solid #334155;">👨‍💼</div>
+          <div style="line-height: 1.3; flex-grow: 1; overflow: hidden;">
+              <div style="color: #f8fafc; font-size: 13px; font-weight: 600; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;" id="user-display-name">Akun Administrator</div>
+              <div style="color: #64748b; font-size: 11px;" id="user-role-badge">Akses Penuh</div>
+          </div>
+          <!-- 🔥 TOMBOL LOGOUT DI SAMPING NAMA AKUN 🔥 -->
+          <button onclick="doLogout()" class="btn-logout-sidebar" title="Logout">🚪</button>
+      </div>
+  </div>
+</nav>
+
+ <div class="main-wrapper">
+ <!-- TOP NAV -->
+ <div class="top-navbar">
+ <div class="d-flex align-items-center">
+ <button class="hamburger-btn" onclick="toggleSidebar()">☰</button>
+ <h2 class="top-title">Dashboard Utama</h2>
+ </div>
+ <div class="btn-action-group">
+ 
+ <!-- 🔥 TOMBOL DOWNLOAD PDF (HANYA TERLIHAT DI TAB RINGKASAN INDIVIDU) 🔥 -->
+ <button id="btn-download-pdf" class="btn-top" style="display:none; background-color: #f59e0b; color: white; border: 1px solid #d97706;" onclick="openDownloadModal()">
+ 📥 <span>Download PDF</span>
+ </button>
+
+ <!-- TOMBOL KEMBALI KE DASHBOARD UTAMA -->
+ <button id="btn-back" class="btn-top btn-back" style="display:none;" onclick="window.resetAllAndGoHome()">⬅️ <span>Dashboard Utama</span></button>
+ </div>
+ </div>
+
+ <div class="content-container">
+ 
+<div class="school-header-panel">
+ <div class="school-info">
+ <img src="" alt="Logo Sekolah" class="school-logo" id="dyn-logo" />
+ <div class="school-text">
+ <h2 class="school-name" id="dyn-school">Nama Instansi</h2>
+ <span class="school-subtext">Sistem Informasi Profil <span class="dyn-pelajar">Pelajar</span></span>
+ </div>
+ </div>
+ <div class="assessment-title">
+ Hasil Asesmen<br /><span>Potensi & Analisis <span class="dyn-pelajar">Pelajar</span></span>
+ </div>
+ </div>
+
+ <!-- FITUR FILTER CASCADING -->
+ <div class="row mb-4 g-3">
+ <div class="col-md-3">
+ <div class="score-box" style="border-left: 4px solid #f59e0b;">
+ <div class="score-title">Total <span class="dyn-pelajar">Pelajar</span></div>
+ <div class="score-value" id="total-siswa">0</div>
+ <div class="score-icon">👥</div>
+ </div>
+ </div>
+ <div class="col-md-9">
+ <div class="row g-2 align-items-end">
+ <div class="col-md-4" id="box-filter-sekolah" style="display:none;">
+ <label class="score-title d-flex justify-content-between align-items-center mb-1">
+ <span>Pilih Sekolah</span>
+ <button class="btn-reset-filter" onclick="window.resetFilter('sekolah');">↺ Reset</button>
+ </label>
+ <select id="filter-sekolah" style="width: 100%;"></select>
+ </div>
+ <div class="col-md-6" id="box-filter-kelas">
+ <label class="score-title d-flex justify-content-between align-items-center mb-1">
+ <span>Pilih <span class="dyn-kelas">Grup</span></span>
+ <button class="btn-reset-filter" onclick="window.resetFilter('kelas');">↺ Reset</button>
+ </label>
+ <select id="filter-kelas" style="width: 100%;"></select>
+ </div>
+ <div class="col-md-6" id="box-filter-nama">
+ <label class="score-title d-flex justify-content-between align-items-center mb-1">
+ <span>Pilih Nama</span>
+ <button class="btn-reset-filter" onclick="window.resetFilter('nama');">↺ Reset</button>
+ </label>
+ <select id="filter-nama" style="width: 100%;"></select>
+ </div>
+ </div>
+ 
+<div class="row g-2 mt-3">
+ <div class="col-6"><div class="score-box p-2 flex-row align-items-center justify-content-between"><div><div class="score-title m-0">Laki-Laki</div><div class="score-value" id="total-l" style="font-size: 22px;">0</div></div><div style="font-size:24px; opacity:0.3">👦</div></div></div>
+ <div class="col-6"><div class="score-box p-2 flex-row align-items-center justify-content-between"><div><div class="score-title m-0">Perempuan</div><div class="score-value" id="total-p" style="font-size: 22px;">0</div></div><div style="font-size:24px; opacity:0.3">👧</div></div></div>
+ </div>
+ </div>
+ </div>
+
+ <div class="tab-content" id="pills-tabContent">
+ 
+<!-- 🔥 1. TAB DASHBOARD UTAMA 🔥 -->
+ <div class="tab-pane fade show active" id="pills-ringkasan" role="tabpanel">
+ <div class="row"><div class="col-md-12" id="card-kepribadian"><div class="dashboard-card clickable-card" onclick="navTo('menu-kepribadian')"><div class="chart-header"><span>Kepribadian</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_kepribadian" class="chart-div"></div></div></div></div>
+ <div class="row"><div class="col-md-7" id="card-kecerdasan"><div class="dashboard-card clickable-card" onclick="navTo('menu-kecerdasan')"><div class="chart-header"><span>Kecerdasan Majemuk</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_kecerdasan" class="chart-div"></div></div></div><div class="col-md-5" id="card-gaya"><div class="dashboard-card clickable-card" onclick="navTo('menu-gaya')"><div class="chart-header"><span>Gaya Belajar</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_gaya" class="chart-div"></div></div></div></div>
+ <div class="row"><div class="col-md-6" id="card-kesejahteraan"><div class="dashboard-card clickable-card" onclick="navTo('menu-kemandirian')"><div class="chart-header"><span>Kesejahteraan Psikologi & Emosional</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_kesejahteraan" class="chart-div"></div></div></div><div class="col-md-6" id="card-kebiasaan"><div class="dashboard-card clickable-card" onclick="navTo('menu-pr')"><div class="chart-header"><span>Kebiasaan Belajar</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_kebiasaan" class="chart-div"></div></div></div></div>
+ <div class="row"><div class="col-md-7" id="card-lingkungan"><div class="dashboard-card clickable-card" onclick="navTo('menu-cara_mendidik')"><div class="chart-header"><span>Kondisi Lingkungan Keluarga</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_lingkungan" class="chart-div"></div></div></div><div class="col-md-5" id="card-profil"><div class="dashboard-card clickable-card" onclick="navTo('menu-minatbakat')"><div class="chart-header"><span>Profil Minat Bakat (RIASEC)</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_minat" class="chart-div"></div></div></div></div>
+ <div class="row">
+ <div class="col-md-6" id="card-ketahanan"><div class="dashboard-card clickable-card" onclick="navTo('menu-ketahanan')"><div class="chart-header"><span>Ketahanan Diri (AQ)</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_ketahanan_diri" class="chart-div"></div></div></div>
+ <div class="col-md-6" id="card-taraf"><div class="dashboard-card clickable-card" onclick="navTo('menu-profil_kecerdasan')"><div class="chart-header"><span>Taraf Kecerdasan</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_profil_kecerdasan" class="chart-div"></div></div></div>
+ </div>
+ <div class="row"><div class="col-md-6" id="card-disc"><div class="dashboard-card clickable-card" onclick="navTo('menu-disc')"><div class="chart-header"><span>Hasil Asesmen DISC</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_disc" class="chart-div"></div></div></div><div class="col-md-6" id="card-papi"><div class="dashboard-card clickable-card" onclick="navTo('menu-papi')"><div class="chart-header"><span>Hasil Papi Kostick</span> <span class="detail-hint">Lihat Detail ➔</span></div><div id="chart_ringkasan_papi" class="chart-div"></div></div></div></div>
+ </div>
+
+ <!-- 🔥 2. TAB RINGKASAN INDIVIDU (KHUSUS 1 NAMA - MULTI HALAMAN PDF) 🔥 -->
+ <div class="tab-pane fade" id="pills-laporan-individu" role="tabpanel">
+ <div id="laporan-kosong" class="dashboard-card text-center py-5">
+ <div style="font-size: 50px; margin-bottom: 20px;">🔍</div>
+ <h4 style="color:#0f172a;">Pilih 1 Nama <span class="dyn-pelajar">Siswa</span></h4>
+ <p style="color:#64748b;">Gunakan filter "Pilih Nama" di atas untuk melihat Laporan Lengkap dan Deskripsi Individu.</p>
+ </div>
+ 
+ <div id="laporan-isi" style="display:none; padding: 15px 0;">
+    <!-- KONTEN PDF AKAN DI-GENERATE DISINI OLEH JAVASCRIPT -->
+ </div>
+ </div>
+
+ <!-- 🔥 NEW: TAB UPLOAD DATA 🔥 -->
+ <div class="tab-pane fade" id="pills-upload" role="tabpanel">
+     <div class="row">
+         <div class="col-md-6">
+             <div class="dashboard-card">
+                 <div class="chart-header"><span>📂 Upload Database Data Siswa</span></div>
+                 <div class="mb-3">
+                     <label for="input-excel-file" class="form-label" style="font-size: 14px; color: #475569;">Pilih File Excel (.xlsx / .xls):</label>
+                     <input class="form-control" type="file" id="input-excel-file" accept=".xlsx, .xls, .csv" style="background-color: #f8fafc; color: #1e293b; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="mb-3">
+                     <label class="form-label" style="font-size: 14px; color: #475569;">Metode Simpan:</label>
+                     <select id="select-upload-mode" class="form-select" style="background-color: #f8fafc; color: #1e293b; border: 1px solid #cbd5e1;">
+                         <option value="append">➕ Tambahkan ke Data yang Sudah Ada (Append)</option>
+                         <option value="replace">⚠️ Timpa Semua Data Lama (Replace)</option>
+                     </select>
+                 </div>
+                 <button type="button" class="btn w-100" id="btn-proses-upload" onclick="prosesUploadExcel()" style="background-color: #0d9488; color: white; border: none; padding: 10px; font-weight: 600; border-radius: 8px;">Mulai Upload Data</button>
+             </div>
+         </div>
+         <div class="col-md-6">
+             <div class="dashboard-card" style="height: 100%;">
+                 <div class="chart-header"><span>📊 Tracker Pipeline / Log Aktivitas</span></div>
+                 <div id="log-upload" class="log-container">
+                     <div class="text-muted" style="text-align: center; margin-top: 100px;">Belum ada aktivitas...</div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ <!-- 🔥 NEW: TAB BUAT AKUN SEKOLAH 🔥 -->
+ <div class="tab-pane fade" id="pills-buat-akun" role="tabpanel">
+     <div class="row">
+         <div class="col-md-6">
+             <div class="dashboard-card">
+                 <div class="chart-header"><span>🏫 Buat Akun Sekolah Baru (Induk)</span></div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Email Login:</label>
+                     <input type="email" class="form-control form-control-sm" id="new-email" placeholder="contoh: admin@sekolah.com" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Password:</label>
+                     <input type="text" class="form-control form-control-sm" id="new-password" placeholder="kata sandi" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Nama Sekolah Asli:</label>
+                     <input type="text" class="form-control form-control-sm" id="new-namasekolah" placeholder="contoh: SMAN 1 BANDUNG" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">URL Logo:</label>
+                     <input type="text" class="form-control form-control-sm" id="new-urllogo" placeholder="link gambar logo" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="row mb-3">
+                     <div class="col-6">
+                         <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Istilah Pelajar:</label>
+                         <input type="text" class="form-control form-control-sm" id="new-istpelajar" value="Siswa" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                     </div>
+                     <div class="col-6">
+                         <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Istilah Kelas:</label>
+                         <input type="text" class="form-control form-control-sm" id="new-istkelas" value="Kelas" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                     </div>
+                 </div>
+                 <button type="button" class="btn w-100" onclick="submitNewUser()" style="background-color: #0ea5e9; color: white; border: none; padding: 10px; font-weight: 600; border-radius: 8px;">Simpan Akun Sekolah</button>
+             </div>
+         </div>
+         <div class="col-md-6">
+             <div class="dashboard-card" style="height: 100%;">
+                 <div class="chart-header"><span>📊 Tracker Pipeline / Log Aktivitas</span></div>
+                 <div id="log-buat-akun" class="log-container">
+                     <div class="text-muted" style="text-align: center; margin-top: 100px;">Belum ada aktivitas...</div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ <!-- 🔥 NEW: TAB BUAT ROLE STAFF 🔥 -->
+ <div class="tab-pane fade" id="pills-buat-role" role="tabpanel">
+     <div class="row">
+         <div class="col-md-6">
+             <div class="dashboard-card">
+                 <div class="chart-header"><span>🛡️ Buat Role Staff Khusus</span></div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Nama Guru/Staff:</label>
+                     <input type="text" class="form-control form-control-sm" id="role-nama" placeholder="Contoh: Budi Santoso" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Sekolah Induk:</label>
+                     <input type="text" class="form-control form-control-sm" id="role-sekolah" placeholder="Pastikan sekolah sudah ada di sistem" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">User (Email):</label>
+                     <input type="email" class="form-control form-control-sm" id="role-user" placeholder="Email untuk login staff" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Password:</label>
+                     <input type="text" class="form-control form-control-sm" id="role-password" placeholder="Kata sandi" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                 </div>
+                 <div class="mb-2">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Pilihan Staff:</label>
+                     <select id="role-tipe" class="form-select form-select-sm" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                         <option value="Guru BK">Guru BK</option>
+                         <option value="Kesiswaan">Kesiswaan</option>
+                         <option value="Kepala Sekolah">Kepala Sekolah</option>
+                     </select>
+                 </div>
+                 <div class="mb-3">
+                     <label class="form-label" style="font-size: 13px; font-weight: 600; color: #475569;">Akses Kelas (Opsional untuk Guru BK):</label>
+                     <input type="text" class="form-control form-control-sm" id="role-kelas" placeholder="Contoh: X-1, X-2 (Pisahkan dengan koma)" style="background-color: #f8fafc; border: 1px solid #cbd5e1;">
+                     <small style="font-size: 10px; color: #64748b;">*Kosongkan jika bisa melihat seluruh kelas di sekolah tersebut.</small>
+                 </div>
+                 <button type="button" class="btn w-100" onclick="submitNewRole()" style="background-color: #8b5cf6; color: white; border: none; padding: 10px; font-weight: 600; border-radius: 8px;">Simpan Role Staff</button>
+             </div>
+         </div>
+         <div class="col-md-6">
+             <div class="dashboard-card" style="height: 100%;">
+                 <div class="chart-header"><span>📊 Tracker Pipeline / Log Aktivitas</span></div>
+                 <div id="log-buat-role" class="log-container">
+                     <div class="text-muted" style="text-align: center; margin-top: 100px;">Belum ada aktivitas...</div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
+
+ <!-- 🔥 3. SEMUA TAB DETAIL (DENGAN TOMBOL TAMPILKAN SEMUA) 🔥 -->
+ <div class="tab-pane fade" id="pills-minatbakat" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Profil Minat Bakat (RIASEC)</span> <button class="btn-tampil-semua" onclick="window.resetTable('minat')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-minat-table"><thead><tr><th>Tipe RIASEC</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_minat_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-minat-table"><thead><tr><th class="text-start">Nama</th><th>L/P</th><th class="dyn-kelas-th">Kelas</th><th style="background-color: #3b82f6;">Realistic</th><th style="background-color: #06b6d4;">Investigative</th><th style="background-color: #ec4899;">Artistic</th><th style="background-color: #f59e0b;">Social</th><th style="background-color: #8b5cf6;">Enterprising</th><th style="background-color: #10b981;">Conventional</th><th>Tipe Final</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-kepribadian" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Report Analisis Kepribadian</span> <button class="btn-tampil-semua" onclick="window.resetTable('kepribadian')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-kepribadian-table"><thead><tr><th>Tipe Kepribadian</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_kepribadian_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-kepribadian-table"><thead><tr><th class="text-start">Nama</th><th>L/P</th><th class="dyn-kelas-th">Kelas</th><th style="background-color: #3b82f6;">Extrovert (E)</th><th style="background-color: #06b6d4;">Introvert (I)</th><th style="background-color: #ec4899;">Sensing (S)</th><th style="background-color: #f59e0b;">Intuition (N)</th><th style="background-color: #8b5cf6;">Thinking (T)</th><th style="background-color: #10b981;">Feeling (F)</th><th style="background-color: #6366f1;">Judging (J)</th><th style="background-color: #0284c7;">Perceiving (P)</th><th>Tipe Final</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-kecerdasan" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Report Analisis Kecerdasan Majemuk</span> <button class="btn-tampil-semua" onclick="window.resetTable('kecerdasan')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-kecerdasan-table"><thead><tr><th>Kecerdasan Majemuk</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_kecerdasan_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-kecerdasan-table"><thead><tr><th class="text-start">Nama</th><th>L/P</th><th class="dyn-kelas-th">Kelas</th><th style="background-color: #3b82f6;">Linguistik</th><th style="background-color: #f59e0b;">Matematis</th><th style="background-color: #ec4899;">Spasial</th><th style="background-color: #ef4444;">Kinestetik</th><th style="background-color: #84cc16;">Musikal</th><th style="background-color: #10b981;">Interpersonal</th><th style="background-color: #8b5cf6;">Intrapersonal</th><th style="background-color: #06b6d4;">Naturalis</th><th>Profil Final</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-profil_kecerdasan" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Taraf Kecerdasan</span> <button class="btn-tampil-semua" onclick="window.resetTable('profil_kecerdasan')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-profil_kecerdasan-table"><thead><tr><th>Taraf Kecerdasan</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_profil_kecerdasan_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-profil_kecerdasan-table"><thead><tr><th class="text-start">Nama</th><th>L/P</th><th class="dyn-kelas-th">Kelas</th><th style="background-color: #0d9488;">Skor CFIT</th><th style="background-color: #0d9488;">Taraf Kecerdasan</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-gaya" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Report Analisis Gaya Belajar</span> <button class="btn-tampil-semua" onclick="window.resetTable('gaya')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-gaya-table"><thead><tr><th>Gaya Belajar</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_gaya_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-gaya-table"><thead><tr><th class="text-start">Nama</th><th>L/P</th><th class="dyn-kelas-th">Kelas</th><th style="background-color: #3b82f6;">Visual</th><th style="background-color: #ec4899;">Auditory</th><th style="background-color: #06b6d4;">Kinesthetic</th><th>Profil Final</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-ketahanan_diri" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Ketahanan Diri (Kategori AQ)</span> <button class="btn-tampil-semua" onclick="window.resetTable('ketahanan_diri')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-ketahanan_diri-table"><thead><tr><th>Kategori AQ</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_ketahanan_diri_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-ketahanan_diri-table"><thead><tr><th class="text-start">Nama</th><th>L/P</th><th class="dyn-kelas-th">Kelas</th><th style="background-color: #0d9488;">Kategori AQ</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-disc" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Hasil Asesmen DISC</span> <button class="btn-tampil-semua" onclick="window.resetTable('disc')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-disc-table"><thead><tr><th>Kategori DISC</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_disc_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-disc-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #3b82f6;">K-D</th><th style="background-color: #3b82f6;">K-I</th><th style="background-color: #3b82f6;">K-S</th><th style="background-color: #3b82f6;">K-C</th><th style="background-color: #f59e0b;">P-D</th><th style="background-color: #f59e0b;">P-I</th><th style="background-color: #f59e0b;">P-S</th><th style="background-color: #f59e0b;">P-C</th><th style="background-color: #0d9488;">Kategori DISC</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-papi" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Hasil Asesmen Papi Kostick</span> <button class="btn-tampil-semua" onclick="window.resetTable('papi')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-papi-table"><thead><tr><th>Kategori Papi Kostick</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_papi_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-papi-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Hasil Papi Kostick</th></tr></thead><tbody></tbody></table></div></div></div>
+
+ <div class="tab-pane fade" id="pills-kemandirian" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Kemandirian</span> <button class="btn-tampil-semua" onclick="window.resetTable('kemandirian')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-kemandirian-table"><thead><tr><th>Kategori Kemandirian</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_kemandirian_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-kemandirian-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-penguasaan" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Penguasaan Lingkungan</span> <button class="btn-tampil-semua" onclick="window.resetTable('penguasaan')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-penguasaan-table"><thead><tr><th>Kategori Penguasaan Lingkungan</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_penguasaan_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-penguasaan-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-pertumbuhan" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Pertumbuhan Pribadi</span> <button class="btn-tampil-semua" onclick="window.resetTable('pertumbuhan')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-pertumbuhan-table"><thead><tr><th>Kategori Pertumbuhan Pribadi</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_pertumbuhan_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-pertumbuhan-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-hubungan" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Hubungan Positif</span> <button class="btn-tampil-semua" onclick="window.resetTable('hubungan')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-hubungan-table"><thead><tr><th>Kategori Hubungan</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_hubungan_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-hubungan-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-tujuan" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Tujuan Hidup</span> <button class="btn-tampil-semua" onclick="window.resetTable('tujuan')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-tujuan-table"><thead><tr><th>Kategori Tujuan</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_tujuan_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-tujuan-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-penerimaan" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Penerimaan Diri</span> <button class="btn-tampil-semua" onclick="window.resetTable('penerimaan')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-penerimaan-table"><thead><tr><th>Kategori Penerimaan</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_penerimaan_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-penerimaan-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+
+ <div class="tab-pane fade" id="pills-pr" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Pekerjaan Rumah & Tugas</span> <button class="btn-tampil-semua" onclick="window.resetTable('pr')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-pr-table"><thead><tr><th>Kategori PR</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_pr_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-pr-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-waktu" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Alokasi Waktu</span> <button class="btn-tampil-semua" onclick="window.resetTable('waktu')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-waktu-table"><thead><tr><th>Kategori Waktu</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_waktu_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-waktu-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-membaca" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Membaca & Mencatat</span> <button class="btn-tampil-semua" onclick="window.resetTable('membaca')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-membaca-table"><thead><tr><th>Kategori Membaca</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_membaca_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-membaca-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-prosedur" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Prosedur Periode Belajar</span> <button class="btn-tampil-semua" onclick="window.resetTable('prosedur')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-prosedur-table"><thead><tr><th>Kategori Prosedur</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_prosedur_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-prosedur-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-konsentrasi" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Konsentrasi</span> <button class="btn-tampil-semua" onclick="window.resetTable('konsentrasi')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-konsentrasi-table"><thead><tr><th>Kategori Konsentrasi</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_konsentrasi_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-konsentrasi-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+
+ <div class="tab-pane fade" id="pills-cara_mendidik" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Cara Orang Tua Mendidik</span> <button class="btn-tampil-semua" onclick="window.resetTable('cara_mendidik')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-cara_mendidik-table"><thead><tr><th>Kategori Cara Mendidik</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_cara_mendidik_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-cara_mendidik-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-relasi" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Relasi Antara Anak & Keluarga</span> <button class="btn-tampil-semua" onclick="window.resetTable('relasi')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-relasi-table"><thead><tr><th>Kategori Relasi</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_relasi_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-relasi-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+ <div class="tab-pane fade" id="pills-suasana_rumah" role="tabpanel"><div class="dashboard-card mb-4"><div class="chart-header"><span>Suasana Rumah</span> <button class="btn-tampil-semua" onclick="window.resetTable('suasana_rumah')">👁️ Tampilkan Semua</button></div><div class="row"><div class="col-md-4"><div class="table-container" style="max-height: 380px;"><table class="custom-table" id="summary-suasana_rumah-table"><thead><tr><th>Kategori Suasana</th><th>Jumlah</th></tr></thead><tbody></tbody></table></div></div><div class="col-md-8"><div id="chart_suasana_rumah_detail" class="chart-div-large"></div></div></div></div><div class="dashboard-card"><div class="table-container"><table class="custom-table" id="detail-suasana_rumah-table"><thead><tr><th class="text-start" style="background-color: #0d9488;">Nama</th><th style="background-color: #0d9488;">L/P</th><th class="dyn-kelas-th" style="background-color: #0d9488;">Kelas</th><th style="background-color: #0d9488;">Kategori</th><th style="background-color: #0d9488;">Skor</th></tr></thead><tbody></tbody></table></div></div></div>
+
+ </div> <!-- End Tab Content -->
+ </div> <!-- End Content Container -->
+ </div> <!-- End Main Wrapper -->
+ </div> <!-- End App Wrapper -->
+
+ <script>
+ // =========================================================================
+ // URL WEB APP APPS SCRIPT SUDAH DIGANTI DAN BERSIAP DIPAKAI
+ // =========================================================================
+ const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwv7WQgaj_nFWn9XJZxDSZdhtT9gi8r2UAPY-wq7fRenOu3du3btdGp3_gNzkdpyoU/exec";
+
+ // FUNGSI JEMBATAN (FETCH API) YANG DISEMPURNAKAN DENGAN AUTO-RETRY (ANTI TIMEOUT)
+ async function callGAS(actionName, payloadData = {}, retries = 3) {
+ try {
+ const response = await fetch(GAS_WEBAPP_URL, {
+ method: "POST",
+ redirect: "follow",
+ headers: {
+ "Content-Type": "text/plain;charset=utf-8", 
+ },
+ body: JSON.stringify({
+ action: actionName,
+ data: payloadData
+ })
+ });
+
+ const textResponse = await response.text();
+ 
+ try {
+ return JSON.parse(textResponse);
+ } catch (parseError) {
+ if (retries > 0) {
+ console.warn(`Server sibuk/data tidak valid, mencoba ulang... (${retries} percobaan tersisa)`);
+ await new Promise(res => setTimeout(res, 2000));
+ return await callGAS(actionName, payloadData, retries - 1);
+ }
+ throw new Error("Server Google sedang sibuk. Mohon muat ulang (refresh) halaman.");
+ }
+ } catch (networkError) {
+ if (retries > 0) {
+ await new Promise(res => setTimeout(res, 2000));
+ return await callGAS(actionName, payloadData, retries - 1);
+ }
+ throw networkError;
+ }
+ }
+
+ let sessionSekolah = ""; 
+ let sessionKelasLabel = "Kelas";
+ let sessionKelasAkses = []; // 🔥 Menyimpan batas akses kelas khusus Guru BK
+
+ // GLOBAL VARIABLES TO STORE CHARTS
+ window.globalCharts = {};
+
+ // FUNGSI LOG TRACKER (Menambahkan Riwayat Aktivitas)
+ function addLog(targetId, message, isSuccess) {
+     const logContainer = document.getElementById(targetId);
+     const time = new Date().toLocaleTimeString('id-ID');
+     const color = isSuccess ? '#10b981' : '#ef4444';
+     const icon = isSuccess ? '✅' : '❌';
+     const logEntry = `<div class="log-entry" style="border-left: 3px solid ${color}; padding-left: 10px;">
+                         <small style="color: #64748b; font-weight: 600;">${time}</small><br>
+                         <span style="color: #1e293b;">${icon} ${message}</span>
+                       </div>`;
+     
+     if (logContainer.innerHTML.includes("Belum ada aktivitas")) {
+         logContainer.innerHTML = '';
+     }
+     logContainer.insertAdjacentHTML('afterbegin', logEntry);
+ }
+
+ function handleEnter(e) { if(e.key === 'Enter') doLogin(); }
+
+ function togglePasswordVisibility() {
+ const passInput = document.getElementById('input-password');
+ if (passInput) {
+ passInput.type = passInput.type === 'password' ? 'text' : 'password';
+ }
+ }
+
+ function doLogin() {
+ const email = document.getElementById('input-email').value;
+ const pass = document.getElementById('input-password').value;
+ const btn = document.getElementById('btn-login');
+ const err = document.getElementById('login-error');
+ 
+ if(!email || !pass) { err.innerText = "Email dan Password harus diisi!"; err.style.display = 'block'; return; }
+ btn.innerText = "Memverifikasi..."; btn.disabled = true; err.style.display = 'none';
+
+ callGAS("verifyLogin", { email: email, password: pass })
+ .then(function(res) {
+ if (res.success) {
+ sessionSekolah = res.namaSekolah;
+ sessionKelasLabel = res.istKelas;
+ sessionKelasAkses = res.kelasAkses || []; 
+
+ document.getElementById('dyn-school').innerText = res.namaSekolah;
+ document.getElementById('dyn-logo').src = res.logoUrl;
+ document.querySelectorAll('.dyn-pelajar').forEach(el => el.innerText = res.istPelajar);
+ document.querySelectorAll('.dyn-kelas').forEach(el => el.innerText = res.istKelas);
+ document.querySelectorAll('.dyn-kelas-th').forEach(el => el.innerText = res.istKelas);
+ document.getElementById('load-sekolah').innerText = res.namaSekolah;
+ document.getElementById('user-display-name').innerText = email;
+
+ // UPDATE BADGE ROLE GURU BK DI SIDEBAR
+ if (sessionKelasAkses && sessionKelasAkses.length > 0) {
+     document.getElementById('user-role-badge').innerText = "Guru BK (" + sessionKelasAkses.join(', ') + ")";
+ } else {
+     document.getElementById('user-role-badge').innerText = "Akses Penuh";
+ }
+
+ const adminMenuSection = document.getElementById('admin-menu-section');
+
+ const sek = (sessionSekolah || "").trim().toUpperCase();
+ const isSuperAdmin = (sek === "SUPER ADMIN" || sek === "AKTARA_PSIKOLOG");
+ const isKonsultan = (sek === "AKTARA_PSIKOLOGI" || sek === "AKATARA_PSIKOLOGI" || sek === "KONSULTAN_AKTARA" || sek === "AKTARA@PSIKOLOG");
+
+ if (isSuperAdmin || isKonsultan) {
+     document.getElementById('box-filter-sekolah').style.display = 'block';
+     document.getElementById('box-filter-nama').className = 'col-md-4';
+     document.getElementById('box-filter-kelas').className = 'col-md-4';
+     
+     if (isSuperAdmin) {
+         if (adminMenuSection) adminMenuSection.style.display = 'block'; // Tampilkan menu sidebar khusus Super Admin
+     } else {
+         if (adminMenuSection) adminMenuSection.style.display = 'none';
+     }
+ } else {
+     document.getElementById('box-filter-sekolah').style.display = 'none';
+     document.getElementById('box-filter-nama').className = 'col-md-6';
+     document.getElementById('box-filter-kelas').className = 'col-md-6';
+     if (adminMenuSection) adminMenuSection.style.display = 'none';
+ }
+
+ document.getElementById('login-screen').style.display = 'none';
+ document.getElementById('loading').style.display = 'block';
+
+ callGAS("getSchoolData", { namaSekolah: res.namaSekolah })
+ .then(function(jsonString) {
+ initDashboard(jsonString);
+ })
+ .catch(err => {
+ alert("Gagal mengambil data: " + err.message);
+ document.getElementById('loading').style.display = 'none';
+ document.getElementById('login-screen').style.display = 'flex';
+ btn.innerText = "Sign In"; btn.disabled = false;
+ });
+
+ } else {
+ err.innerText = res.message; err.style.display = 'block';
+ btn.innerText = "Sign In"; btn.disabled = false;
+ }
+ })
+ .catch(function(e) {
+ err.innerText = "Koneksi terputus: " + e.message; err.style.display = 'block';
+ btn.innerText = "Sign In"; btn.disabled = false;
+ });
+ }
+
+ function doLogout() {
+ if(confirm("Apakah Anda yakin ingin keluar dari Dashboard?")) {
+ document.getElementById('main-content').style.display = 'none';
+ document.getElementById('login-screen').style.display = 'flex';
+ document.getElementById('input-email').value = '';
+ document.getElementById('input-password').value = '';
+ document.getElementById('login-error').style.display = 'none';
+ document.getElementById('btn-login').innerText = "Sign In";
+ document.getElementById('btn-login').disabled = false;
+ $('#filter-sekolah').val(null).trigger('change');
+ $('#filter-nama').val(null).trigger('change');
+ $('#filter-kelas').val(null).trigger('change');
+ allRows = []; sessionSekolah = ""; sessionKelasAkses = [];
+ document.getElementById('user-role-badge').innerText = "Akses Penuh";
+ // Reset logs
+ document.getElementById('log-upload').innerHTML = '<div class="text-muted" style="text-align: center; margin-top: 100px;">Belum ada aktivitas...</div>';
+ document.getElementById('log-buat-akun').innerHTML = '<div class="text-muted" style="text-align: center; margin-top: 100px;">Belum ada aktivitas...</div>';
+ document.getElementById('log-buat-role').innerHTML = '<div class="text-muted" style="text-align: center; margin-top: 100px;">Belum ada aktivitas...</div>';
+ }
+ }
+
+ window.resetAllAndGoHome = function() {
+ if ($('#filter-nama').val()) {
+ $('#filter-nama').val("").trigger('change');
+ }
+ navTo('menu-ringkasan');
+ };
+
+ window.resetFilter = function(type) {
+ if (type === 'sekolah') { $('#filter-sekolah').val("").trigger('change'); } 
+ else if (type === 'kelas') { $('#filter-kelas').val("").trigger('change'); } 
+ else if (type === 'nama') { $('#filter-nama').val("").trigger('change'); }
+ };
+
+ function navTo(menuId) {
+ const menuBtn = document.getElementById(menuId);
+ if (menuBtn) {
+ menuBtn.click();
+ let parentCollapse = menuBtn.closest('.collapse');
+ if (parentCollapse && !parentCollapse.classList.contains('show')) {
+ new bootstrap.Collapse(parentCollapse, {toggle: true});
+ }
+ document.querySelector('.main-wrapper').scrollTo({ top: 0, behavior: 'smooth' });
+ }
+ }
+
+ function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 310); }
+
+ document.addEventListener("DOMContentLoaded", function() {
+ const allTabButtons = document.querySelectorAll('#sidebar button[data-bs-toggle="pill"]');
+ allTabButtons.forEach(btn => {
+ btn.addEventListener('show.bs.tab', function (e) {
+ document.querySelectorAll('.tab-pane').forEach(pane => { pane.classList.remove('show', 'active'); });
+ allTabButtons.forEach(b => b.classList.remove('active'));
+ this.classList.add('active');
+ let cleanTitle = this.innerText.replace(/([\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF])/g, '').trim();
+ document.querySelector('.top-title').innerText = cleanTitle;
+ document.getElementById('sidebar').classList.remove('open');
+ 
+ if(this.id === 'menu-ringkasan' || this.id === 'menu-laporan-individu' || this.id === 'menu-upload' || this.id === 'menu-buat-akun' || this.id === 'menu-buat-role') {
+ document.getElementById('btn-back').style.display = 'none';
+ } else {
+ document.getElementById('btn-back').style.display = 'flex';
+ }
+
+ // 🔥 TOMBOL PDF HANYA MUNCUL JIKA SEDANG MEMBUKA TAB RINGKASAN INDIVIDU 🔥
+ const btnDownloadPdf = document.getElementById('btn-download-pdf');
+ if (this.id === 'menu-laporan-individu') {
+     if (btnDownloadPdf) btnDownloadPdf.style.display = 'flex';
+ } else {
+     if (btnDownloadPdf) btnDownloadPdf.style.display = 'none';
+ }
+
+ setTimeout(() => { window.dispatchEvent(new Event('resize')); }, 310);
+ });
+ });
+ });
+
+ const CONFIG = {
+ kolomNamaSekolah: "Nama Sekolah",
+ kolomNama: "Nama", 
+ kolomKelas: "Kelas", 
+ kolomGender: "Jenis Kelamin", 
+
+ kolomUsia: "Usia",
+ kolomNoUnik: "No. Unik",
+
+ kolomKepribadian: "Tipe Kepribadian", 
+ kolomKecerdasanMajemuk: "Profil Kecerdasan", 
+ kolomGayaBelajar: "Profil Gaya Belajar",
+ 
+ kolomE: "Extrovert (E)", kolomI: "Introvert (I)", kolomS: "Sensing (S)", 
+ kolomN: "Intuition (N)", kolomT: "Thinking (T)", kolomF: "Feeling (F)", 
+ kolomJ: "Judging (J)", kolomP: "Perceiving (P)",
+ 
+ kolomLing: "Linguistik", kolomMat: "Matematis", kolomSpa: "Spasial", 
+ kolomKin: "Kinestetik", kolomMus: "Musikal", kolomInter: "Interpersonal", 
+ kolomIntra: "Intrapersonal", kolomNat: "Naturalis",
+ 
+ kolomVis: "Visual", kolomAud: "Auditory", kolomKines: "Kinesthetic",
+ 
+ kolomTarafKecerdasan: "Taraf Kecerdasan CFIT", 
+ kolomTipeKecerdasan: "Kategori CFIT", 
+
+ kolomKetahananDiri: "Kategori AQ",
+ kolomCamper: "Camper AQ", kolomClimber: "Climber AQ", kolomQuitter: "Quitter AQ",
+ 
+ kolomTipeRIASEC: "Tipe RIASEC", 
+ kolomReal: "Realistic", kolomInv: "Investigative", kolomArt: "Artistic", 
+ kolomSoc: "Social", kolomEnt: "Enterprising", kolomConv: "Conventional",
+ 
+ kolomDISC: "Kategori DISC", 
+ kolomPapi: "Hasil Papi Kostick",
+ k_d: "K-D DISC", k_i: "K-I DISC", k_s: "K-S DISC", k_c: "K-C DISC", 
+ p_d: "P-D DISC", p_i: "P-I DISC", p_s: "P-S DISC", p_c: "P-C DISC",
+ 
+ kolomKemandirianKat: "Kategori Mandiri", 
+ kolomPenguasaanKat: "Kategori Penguasaan Lingkungan", 
+ kolomPertumbuhanKat: "Kategori Pertumbuhan Pribadi", 
+ kolomHubunganKat: "Kategori Hubungan Positif dengan Orang Lain", 
+ kolomTujuanKat: "Kategori Tujuan Hidup", 
+ kolomPenerimaanKat: "Kategori Penerimaan diri",
+ 
+ kolomKemandirianSkor: "Mandiri", 
+ kolomPenguasaanSkor: "Penguasaan Lingkungan", 
+ kolomPertumbuhanSkor: "Pertumbuhan Pribadi", 
+ kolomHubunganSkor: "Hubungan Positif dengan Orang Lain", 
+ kolomTujuanSkor: "Tujuan Hidup", 
+ kolomPenerimaanSkor: "Penerimaan diri",
+ 
+ kolomPRKat: "Kategori Pekerjaan Rumah dan Tugas", 
+ kolomWaktuKat: "Kategori Alokasi Waktu", 
+ kolomMembacaKat: "Kategori Membaca dan Mencatat", 
+ kolomProsedurKat: "Kategori Prosedur Periode Belajar", 
+ kolomKonsentrasiKat: "Kategori Konsentrasi",
+ 
+ kolomPRSkor: "Pekerjaan Rumah dan Tugas", 
+ kolomWaktuSkor: "Alokasi Waktu", 
+ kolomMembacaSkor: "Membaca dan Mencatat", 
+ kolomProsedurSkor: "Prosedur Periode Belajar", 
+ kolomKonsentrasiSkor: "Konsentrasi",
+ 
+ kolomCaraMendidikKat: "Kategori Cara orang tua mendidik", 
+ kolomRelasiKat: "Kategori Relasi antara anak dan anggota keluarga", 
+ kolomSuasanaRumahKat: "Kategori Suasana Rumah",
+ 
+ kolomCaraMendidikSkor: "Cara orang tua mendidik", 
+ kolomRelasiSkor: "Relasi antara anak dan anggota keluarga", 
+ kolomSuasanaRumahSkor: "Suasana Rumah",
+
+ kolomKepriMenonjol: "Sangat Menonjol", 
+ kolomKepriKembang: "Butuh Pengembangan",
+ 
+ kolomKecerDesk: "Deskripsi Kecerdasan Majemuk", 
+ kolomKecerCiri: "Ciri-ciri Kecerdasan Majemuk", 
+ kolomKecerSaran: "Saran Ekstrakurikuler",
+ 
+ kolomGayaDesk: "Deskripsi Gaya Belajar", 
+ kolomGayaCiri: "Ciri-ciri Gaya Belajar", 
+ kolomGayaSaran: "Strategi Belajar",
+ 
+ kolomRiasecDesk: "Deskripsi RIASEC", 
+ kolomRiasecJurusan: "Saran Jurusan di Kampus", 
+ kolomRiasecMapel: "Mata pelajaran yang mendukung",
+ kolomRiasecKarir: "Rekomendasi Karir" 
+ };
+
+ let allRows = []; let colIndices = {};
+ google.charts.load('current', {'packages':['corechart']});
+
+ function getChartOptions(type, isLight = true) {
+ let textColor = isLight ? '#334155' : '#d1d5db';
+ let axisColor = isLight ? '#64748b' : '#8a94a6';
+ let gridColor = isLight ? '#e2e8f0' : '#2f333d';
+ let isMobile = window.innerWidth <= 768;
+ 
+ let options = {
+ backgroundColor: 'transparent',
+ legend: { textStyle: { color: textColor, fontSize: isMobile ? 11 : 13 }, position: 'top' }, 
+ hAxis: { 
+ textStyle: { color: axisColor, fontSize: isMobile ? 9 : 10 }, 
+ gridlines: { color: gridColor }, 
+ baselineColor: gridColor,
+ slantedText: isMobile,
+ slantedTextAngle: isMobile ? 35 : 0
+ },
+ vAxis: { textStyle: { color: axisColor, fontSize: isMobile ? 9 : 11 }, gridlines: { color: gridColor }, baselineColor: gridColor },
+ animation: { startup: true, duration: 600, easing: 'out' } 
+ };
+
+ if (type === 'single') {
+ options.legend = 'none';
+ options.chartArea = { left: isMobile ? '12%' : '8%', width: isMobile ? '82%' : '90%', height: isMobile ? '60%' : '70%', top: 30 };
+ } else if (type === 'grouped') {
+ options.chartArea = { left: isMobile ? '12%' : '8%', width: isMobile ? '82%' : '90%', height: isMobile ? '55%' : '65%', top: 40 };
+ } else if (type === 'donut') {
+ options.pieHole = 0.35;
+ options.pieSliceBorderColor = isLight ? '#ffffff' : '#22252a';
+ options.pieSliceText = 'value';
+ options.pieSliceTextStyle = { fontSize: isMobile ? 12 : 14, bold: true, color: '#ffffff' };
+ options.legend = { textStyle: { color: textColor, fontSize: isMobile ? 11 : 13 }, position: isMobile ? 'bottom' : 'right', alignment: 'center' };
+ options.chartArea = { left: isMobile ? '5%' : '5%', width: isMobile ? '90%' : '60%', height: isMobile ? '70%' : '85%', top: 20 };
+ }
+ return options;
+ }
+
+ const isVal = (val) => {
+ if (val === undefined || val === null) return false;
+ let v = String(val).trim().toLowerCase();
+ return (v !== "" && v !== "-" && v !== "undefined" && v !== "null" && v !== "#n/a" && v !== "false" && v !== "#ref!" && v !== "#value!");
+ };
+
+ function initDashboard(jsonString) {
+ if (!jsonString) return;
+ const dataObj = typeof jsonString === 'string' ? JSON.parse(jsonString) : jsonString;
+ allRows = dataObj.rows || [];
+ if (!dataObj.headers || allRows.length === 0) {
+ alert("Belum ada data siswa untuk " + sessionSekolah);
+ document.getElementById('loading').style.display = 'none';
+ document.getElementById('login-screen').style.display = 'flex';
+ return;
+ }
+ 
+ dataObj.headers.forEach((header, index) => {
+ let cleanHeader = header.trim().toLowerCase();
+ for (let key in CONFIG) { if (cleanHeader === CONFIG[key].trim().toLowerCase()) colIndices[key] = index; }
+ });
+
+ // 🔥 IMPLEMENTASI ROLE GURU BK (PEMBATASAN AKSES KELAS) 🔥
+ if (sessionKelasAkses && sessionKelasAkses.length > 0) {
+     allRows = allRows.filter(row => {
+         let klsSiswa = String(row[colIndices.kolomKelas] || "").trim().toLowerCase();
+         // Cek apakah kelas siswa ini ada di dalam list yang diizinkan (sessionKelasAkses)
+         return sessionKelasAkses.some(akses => akses.trim().toLowerCase() === klsSiswa);
+     });
+
+     if (allRows.length === 0) {
+         alert("Data siswa dari kelas " + sessionKelasAkses.join(', ') + " tidak ditemukan di database.");
+         document.getElementById('loading').style.display = 'none';
+         document.getElementById('login-screen').style.display = 'flex';
+         return;
+     }
+ }
+
+ document.getElementById('loading').style.display = 'none';
+ document.getElementById('main-content').style.display = 'flex';
+
+ const sek = (sessionSekolah || "").trim().toUpperCase();
+ const isSuperAdmin = (sek === "SUPER ADMIN" || sek === "AKTARA_PSIKOLOG");
+ const isKonsultan = (sek === "AKTARA_PSIKOLOGI" || sek === "AKATARA_PSIKOLOGI" || sek === "KONSULTAN_AKTARA" || sek === "AKTARA@PSIKOLOG");
+
+ if (isSuperAdmin || isKonsultan) {
+ const setSekolah = new Set();
+ allRows.forEach(row => { if (isVal(row[colIndices.kolomNamaSekolah])) setSekolah.add(String(row[colIndices.kolomNamaSekolah]).trim()); });
+ populateDropdown('filter-sekolah', setSekolah, "-- Semua Sekolah --");
+ $('#filter-sekolah').select2({ placeholder: "-- Semua Sekolah --", allowClear: false, width: '100%' });
+ } 
+
+ let isUpdating = false;
+ updateDropdowns('init');
+ 
+ $('#filter-sekolah').on('change', function() { if(isUpdating) return; isUpdating = true; updateDropdowns('sekolah'); updateDashboard(); isUpdating = false; });
+ $('#filter-kelas').on('change', function() { if(isUpdating) return; isUpdating = true; updateDropdowns('kelas'); updateDashboard(); isUpdating = false; });
+ $('#filter-nama').on('change', function() { if(isUpdating) return; isUpdating = true; updateDashboard(); isUpdating = false; });
+ 
+ google.charts.setOnLoadCallback(updateDashboard);
+ }
+
+ function updateDropdowns(source) {
+ let fSekolah = $('#filter-sekolah').val();
+ let fKelas = $('#filter-kelas').val();
+ 
+ const sek = (sessionSekolah || "").trim().toUpperCase();
+ const isPrivileged = (sek === "SUPER ADMIN" || sek === "AKTARA_PSIKOLOG" || sek === "AKTARA_PSIKOLOGI" || sek === "AKATARA_PSIKOLOGI" || sek === "KONSULTAN_AKTARA" || sek === "AKTARA@PSIKOLOG");
+ if (!isPrivileged) fSekolah = sessionSekolah;
+
+ let validRows = allRows;
+ if (fSekolah) validRows = validRows.filter(r => String(r[colIndices.kolomNamaSekolah]).trim() === fSekolah);
+ 
+ if (source === 'sekolah' || source === 'init') {
+ const newKelas = new Set(); const newNama = new Set();
+ validRows.forEach(r => {
+ if (isVal(r[colIndices.kolomKelas])) newKelas.add(String(r[colIndices.kolomKelas]).trim());
+ if (isVal(r[colIndices.kolomNama])) newNama.add(String(r[colIndices.kolomNama]).trim());
+ });
+ $('#filter-kelas').empty(); populateDropdown('filter-kelas', newKelas, "-- Semua " + sessionKelasLabel + " --");
+ $('#filter-nama').empty(); populateDropdown('filter-nama', newNama, "-- Semua Nama --");
+ 
+ $('#filter-kelas').select2({ placeholder: "-- Semua " + sessionKelasLabel + " --", allowClear: false, width: '100%' });
+ $('#filter-nama').select2({ placeholder: "-- Semua Nama --", allowClear: false, width: '100%' });
+ 
+ if (source !== 'init') {
+ $('#filter-kelas').val("").trigger('change.select2');
+ $('#filter-nama').val("").trigger('change.select2');
+ }
+ } 
+ else if (source === 'kelas') {
+ if (fKelas) validRows = validRows.filter(r => String(r[colIndices.kolomKelas]).trim() === fKelas);
+ const newNama = new Set();
+ validRows.forEach(r => { if (isVal(r[colIndices.kolomNama])) newNama.add(String(r[colIndices.kolomNama]).trim()); });
+ 
+ $('#filter-nama').empty(); populateDropdown('filter-nama', newNama, "-- Semua Nama --");
+ $('#filter-nama').select2({ placeholder: "-- Semua Nama --", allowClear: false, width: '100%' });
+ $('#filter-nama').val("").trigger('change.select2');
+ }
+ }
+
+ function populateDropdown(elementId, setList, defaultText) {
+ const select = $('#' + elementId); select.empty(); select.append(new Option(defaultText, ""));
+ const sortedList = Array.from(setList).filter(v => v && v !== "-" && v !== "").sort();
+ sortedList.forEach(item => { select.append(new Option(item, item)); });
+ }
+
+ function updateDashboard() {
+ const filterNama = $('#filter-nama').val();
+ const filterKelas = $('#filter-kelas').val();
+ const filterSekolah = $('#filter-sekolah').val();
+
+ let filteredRows = allRows;
+ 
+ const sek = (sessionSekolah || "").trim().toUpperCase();
+ const isPrivileged = (sek === "SUPER ADMIN" || sek === "AKTARA_PSIKOLOG" || sek === "AKTARA_PSIKOLOGI" || sek === "AKATARA_PSIKOLOGI" || sek === "KONSULTAN_AKTARA" || sek === "AKTARA@PSIKOLOG");
+ if (isPrivileged && filterSekolah && colIndices.kolomNamaSekolah !== undefined) {
+ filteredRows = filteredRows.filter(r => String(r[colIndices.kolomNamaSekolah]).trim() === filterSekolah);
+ }
+ if (filterKelas && colIndices.kolomKelas !== undefined) filteredRows = filteredRows.filter(r => String(r[colIndices.kolomKelas]).trim() === filterKelas);
+ if (filterNama && colIndices.kolomNama !== undefined) filteredRows = filteredRows.filter(r => String(r[colIndices.kolomNama]).trim() === filterNama);
+
+ let lakiLaki = 0; let perempuan = 0;
+ const counts = { minat: {}, kepribadian: {}, kecerdasan: {}, gayaBelajar: {}, tarafKecerdasan: {}, tipeKecerdasan: {}, ketahananDiri: {}, disc: {}, papi: {}, kemandirian: {}, penguasaan: {}, pertumbuhan: {}, hubungan: {}, tujuan: {}, penerimaan: {}, pr: {}, waktu: {}, membaca: {}, prosedur: {}, konsentrasi: {}, caraMendidik: {}, relasi: {}, suasanaRumah: {} };
+
+ filteredRows.forEach(row => {
+ if (colIndices.kolomGender !== undefined) {
+ let g = String(row[colIndices.kolomGender]).toUpperCase().trim();
+ if (g === 'L' || g === 'LAKI-LAKI' || g === 'PRIA' || g === 'LAKI LAKI') lakiLaki++;
+ if (g === 'P' || g === 'PEREMPUAN' || g === 'WANITA') perempuan++;
+ }
+ const aggregate = (colKey, countObj) => { 
+ if (colIndices[colKey] !== undefined) { 
+ let val = String(row[colIndices[colKey]]).trim(); 
+ if (isVal(val)) { countObj[val] = (countObj[val] || 0) + 1; } 
+ } 
+ };
+ aggregate('kolomTipeRIASEC', counts.minat); aggregate('kolomKepribadian', counts.kepribadian); aggregate('kolomKecerdasanMajemuk', counts.kecerdasan); aggregate('kolomGayaBelajar', counts.gayaBelajar); aggregate('kolomTipeKecerdasan', counts.tipeKecerdasan); aggregate('kolomKetahananDiri', counts.ketahananDiri); aggregate('kolomDISC', counts.disc); aggregate('kolomPapi', counts.papi); aggregate('kolomKemandirianKat', counts.kemandirian); aggregate('kolomPenguasaanKat', counts.penguasaan); aggregate('kolomPertumbuhanKat', counts.pertumbuhan); aggregate('kolomHubunganKat', counts.hubungan); aggregate('kolomTujuanKat', counts.tujuan); aggregate('kolomPenerimaanKat', counts.penerimaan); aggregate('kolomPRKat', counts.pr); aggregate('kolomWaktuKat', counts.waktu); aggregate('kolomMembacaKat', counts.membaca); aggregate('kolomProsedurKat', counts.prosedur); aggregate('kolomKonsentrasiKat', counts.konsentrasi); aggregate('kolomCaraMendidikKat', counts.caraMendidik); aggregate('kolomRelasiKat', counts.relasi); aggregate('kolomSuasanaRumahKat', counts.suasanaRumah);
+ });
+
+ document.getElementById('total-siswa').innerText = filteredRows.length;
+ document.getElementById('total-l').innerText = lakiLaki;
+ document.getElementById('total-p').innerText = perempuan;
+
+ let isNameFiltered = (filterNama && filterNama !== "");
+ const toggleIndiv = (id, show) => { const el = document.getElementById(id); if (el) el.style.display = show ? '' : 'none'; };
+
+ // =========================================================================
+ // 🔥 LOGIKA GENERATOR PDF INDIVIDU (DESAIN BARU COMPACT + COVER) 🔥
+ // =========================================================================
+ if (isNameFiltered && filteredRows.length > 0) {
+    const siswa = filteredRows[0];
+    document.getElementById('laporan-kosong').style.display = 'none';
+    document.getElementById('laporan-isi').style.display = 'block';
+
+    const getValStr = (col) => { let val = siswa[colIndices[col]]; if (!isVal(val)) return "-"; return String(val).trim(); };
+    const getNum = (col) => { let val = siswa[colIndices[col]]; if (!isVal(val)) return 0; if (typeof val === 'string') return parseFloat(val.replace(',', '.')) || 0; return parseFloat(val) || 0; };
+    const safeText = (col) => { let text = getValStr(col); return text !== "-" ? text.replace(/\n/g, '<br>') : '-'; };
+
+    let sekolahName = getValStr('kolomNamaSekolah'); 
+    if(sekolahName === '-') sekolahName = $('#filter-sekolah').val() || sessionSekolah || "-";
+    
+    // Logo paten Ganesa untuk dicetak
+    let logoSrc = "https://lh3.googleusercontent.com/d/1Wqpp9soE46uHXkCdJiPF3pzbt8QGTypJ";
+
+    // =========================================================================
+    // 🔥 HALAMAN 1: COVER BIODATA 🔥
+    // =========================================================================
+    let coverHtml = `
+    <div class="pdf-page" style="position: relative; display: flex; flex-direction: column; justify-content: center; align-items: center; border-left: 3px solid #d4af37; border-right: 3px solid #d4af37; padding: 45px 55px; overflow: hidden; background-color: #ffffff;">
+        <div style="position: absolute; top: -70px; right: -70px; width: 220px; height: 220px; background: #7ee2d7; transform: rotate(45deg); z-index: 1;"></div>
+        <div style="position: absolute; top: -100px; right: 0px; width: 150px; height: 150px; background: #000; transform: rotate(45deg); z-index: 2;"></div>
+        <div style="position: absolute; bottom: -70px; left: -70px; width: 220px; height: 220px; background: #000; transform: rotate(45deg); z-index: 1;"></div>
+        <div style="position: absolute; bottom: -60px; left: -80px; width: 220px; height: 220px; border: 2px solid #7ee2d7; transform: rotate(45deg); z-index: 2; background: transparent;"></div>
+        
+        <div style="position: absolute; top: 40px; left: 40px; display: flex; align-items: flex-start; z-index: 3;">
+            <img src="${logoSrc}" alt="Logo" style="height: 75px; margin-right: 15px; object-fit: contain;">
+            <div>
+                <h1 style="font-size: 24px; font-weight: bold; color: #000; margin: 0 0 4px 0; letter-spacing: 1px;">GANESA.ID</h1>
+                <p style="font-size: 11px; color: #555; margin: 0; line-height: 1.3;"><i>Gerbang Assessment Indonesia</i></p>
+                <hr style="margin: 4px 0; border-color: #000; border-width: 2px; width: 100%;">
+                <p style="font-size: 10px; color: #333; margin: 0; line-height: 1.3;"><b>PT. AKARA NATURA NUSANTARA</b><br>Jalan Kanayakan Lama No 40a Bandung | Jln Sadang Serang No 18 Bandung</p>
+            </div>
+        </div>
+        <img src="${logoSrc}" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.04; width: 450px; z-index: 1;">
+        <div style="z-index: 10; font-size: 15px; color: #000; width: 55%; margin-top: 50px; line-height: 1.5;">
+            <div style="display: grid; grid-template-columns: 140px 20px 1fr; margin-bottom: 12px;"><strong style="font-weight: 800;">Grup</strong><span>:</span><span>${sekolahName}</span></div>
+            <div style="display: grid; grid-template-columns: 140px 20px 1fr; margin-bottom: 12px;"><strong style="font-weight: 800;">Kelas</strong><span>:</span><span>${getValStr('kolomKelas')}</span></div>
+            <div style="display: grid; grid-template-columns: 140px 20px 1fr; margin-bottom: 12px;"><strong style="font-weight: 800;">Nama</strong><span>:</span><span>${getValStr('kolomNama')}</span></div>
+            <div style="display: grid; grid-template-columns: 140px 20px 1fr; margin-bottom: 12px;"><strong style="font-weight: 800;">Jenis Kelamin</strong><span>:</span><span>${getValStr('kolomGender')}</span></div>
+            <div style="display: grid; grid-template-columns: 140px 20px 1fr; margin-bottom: 12px;"><strong style="font-weight: 800;">Usia</strong><span>:</span><span>${getValStr('kolomUsia')}</span></div>
+            <div style="display: grid; grid-template-columns: 140px 20px 1fr; margin-bottom: 12px;"><strong style="font-weight: 800;">No. Unik</strong><span>:</span><span>${getValStr('kolomNoUnik')}</span></div>
+        </div>
+    </div>
+    `;
+
+    // =========================================================================
+    // 🔥 HALAMAN 2 & 3: ISI LAPORAN ASESMEN PSIKOLOGI (DYNAMIC FLOW) 🔥
+    // =========================================================================
+    let sections = [];
+    let secCount = 1;
+
+    if (isVal(siswa[colIndices.kolomKepribadian])) {
+        let I = getNum('kolomI'), E = getNum('kolomE'), S = getNum('kolomS'), N = getNum('kolomN');
+        let T = getNum('kolomT'), F = getNum('kolomF'), J = getNum('kolomJ'), P = getNum('kolomP');
+        let domTraits = [];
+        domTraits.push(I >= E ? `Introvert ${I}%` : `Extrovert ${E}%`);
+        domTraits.push(S >= N ? `Sensing ${S}%` : `Intuition ${N}%`);
+        domTraits.push(F >= T ? `Feeling ${F}%` : `Thinking ${T}%`);
+        domTraits.push(J >= P ? `Judging ${J}%` : `Perceiving ${P}%`);
+        
+        sections.push({
+            weight: 18,
+            html: `
+            <div class="pr-section-title-new">${secCount++}. KEPRIBADIAN (${getValStr('kolomKepribadian')})</div>
+            <div class="flex-between" style="align-items: flex-start; gap: 20px;">
+                <div style="flex: 1;">
+                    <p class="pr-text" style="margin-bottom:8px;">${safeText('kolomKepriMenonjol')}</p>
+                    <p class="pr-text"><b>Saran Pengembangan:</b> ${safeText('kolomKepriKembang')}</p>
+                </div>
+                <div style="width: 140px; text-align: right; font-size: 11px; color:#333; line-height: 1.8;">
+                    ${domTraits.join(' | <br>')} |
+                </div>
+            </div>
+            `
+        });
+    }
+
+    if (isVal(siswa[colIndices.kolomGayaBelajar])) {
+        let gayaArr = [
+            {n: 'Visual', s: getNum('kolomVis')}, {n: 'Auditory', s: getNum('kolomAud')}, {n: 'Kinesthetic', s: getNum('kolomKines')}
+        ].sort((a,b) => b.s - a.s);
+        sections.push({
+            weight: 15,
+            html: `
+            <div class="pr-section-title-new">${secCount++}. GAYA BELAJAR DOMINAN</div>
+            <p class="pr-text" style="margin-bottom: 8px;">
+                <b>${gayaArr[0].n.toUpperCase()} (${gayaArr[0].s}%)</b> | ${gayaArr[1].n} (${gayaArr[1].s}%) | ${gayaArr[2].n} (${gayaArr[2].s}%)
+            </p>
+            <p class="pr-text">${safeText('kolomGayaCiri')}</p>
+            `
+        });
+    }
+
+    if (isVal(siswa[colIndices.kolomTarafKecerdasan])) {
+        sections.push({
+            weight: 15,
+            html: `
+            <div class="pr-section-title-new">${secCount++}. PROFIL KECERDASAN (IQ: ${getValStr('kolomTarafKecerdasan')} - KATEGORI ${getValStr('kolomTipeKecerdasan')})</div>
+            <div class="pr-grid-3">
+                <div><p class="text-bold" style="margin-bottom:2px; font-size:11px;">Ketajaman Diferensiasi (${getValStr('kolomTipeKecerdasan')}):</p><p class="pr-text-xs">Kritis mengidentifikasi detail masalah.</p></div>
+                <div><p class="text-bold" style="margin-bottom:2px; font-size:11px;">Sistematika Berpikir (${getValStr('kolomTipeKecerdasan')}):</p><p class="pr-text-xs">Teratur, logis, dan sistematis.</p></div>
+                <div><p class="text-bold" style="margin-bottom:2px; font-size:11px;">Kemampuan Asosiasi (${getValStr('kolomTipeKecerdasan')}):</p><p class="pr-text-xs">Cukup mampu menghubungkan ide.</p></div>
+            </div>
+            `
+        });
+    }
+
+    if (isVal(siswa[colIndices.kolomKecerdasanMajemuk])) {
+        let miArr = [
+            {n: 'Linguistik', s: getNum('kolomLing')}, {n: 'Matematis', s: getNum('kolomMat')},
+            {n: 'Spasial', s: getNum('kolomSpa')}, {n: 'Kinestetik', s: getNum('kolomKin')},
+            {n: 'Musikal', s: getNum('kolomMus')}, {n: 'Interpersonal', s: getNum('kolomInter')},
+            {n: 'Intrapersonal', s: getNum('kolomIntra')}, {n: 'Naturalis', s: getNum('kolomNat')}
+        ].sort((a,b) => b.s - a.s).slice(0, 3);
+        
+        let miHtml = `
+        <div class="pr-section-title-new">${secCount++}. KECERDASAN MAJEMUK UTAMA</div>
+        <div class="pr-grid-3">
+        `;
+        miArr.forEach(m => {
+            miHtml += `<div><p class="text-bold" style="margin-bottom:2px; font-size:11px;">${m.n} (${m.s}%):</p><p class="pr-text-xs">Kecerdasan dominan pada bidang ${m.n.toLowerCase()}.</p></div>`;
+        });
+        miHtml += `</div>`;
+
+        sections.push({
+            weight: 15,
+            html: miHtml
+        });
+    }
+
+    if (isVal(siswa[colIndices.kolomTipeRIASEC])) {
+        let rArr = [
+            {n: 'Realistic', s: getNum('kolomReal')}, {n: 'Investigative', s: getNum('kolomInv')},
+            {n: 'Artistic', s: getNum('kolomArt')}, {n: 'Social', s: getNum('kolomSoc')},
+            {n: 'Enterprising', s: getNum('kolomEnt')}, {n: 'Conventional', s: getNum('kolomConv')}
+        ].sort((a,b) => b.s - a.s).slice(0, 2);
+        
+        sections.push({
+            weight: 26,
+            html: `
+            <div class="pr-section-title-new">${secCount++}. MINAT BAKAT (RIASEC) & KARIR</div>
+            <div class="pr-grid-2">
+                <div>
+                    <p class="pr-text-sm" style="margin-bottom:6px;"><b>${rArr[0].n} (${rArr[0].s}%):</b> Dominan pertama.</p>
+                    <p class="pr-text-sm" style="margin-bottom:6px;"><b>${rArr[1].n} (${rArr[1].s}%):</b> Dominan kedua.</p>
+                </div>
+                <div>
+                    <p class="pr-text-sm" style="margin-bottom:6px;"><b>Rekomendasi Jurusan:</b><br>${safeText('kolomRiasecJurusan')}</p>
+                    <p class="pr-text-sm" style="margin-bottom:6px;"><b>Mata Pelajaran Pendukung:</b><br>${safeText('kolomRiasecMapel')}</p>
+                </div>
+            </div>
+            <div style="margin-top: 8px;">
+                <p class="pr-text-sm" style="margin-bottom:6px;"><b>Kompetensi Kuat:</b><br>${safeText('kolomRiasecDesk')}</p>
+            </div>
+            `
+        });
+    }
+
+    if (isVal(siswa[colIndices.kolomCaraMendidikKat])) {
+        sections.push({
+            weight: 25,
+            html: `
+            <div class="pr-section-title-new">${secCount++}. KONDISI LINGKUNGAN KELUARGA</div>
+            <table class="pr-table-compact">
+                <thead><tr><th style="width:25%;">Aspek</th><th style="width:25%;">Skor</th><th>Deskripsi Singkat</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td><b>Cara Orang Tua Mendidik</b></td>
+                        <td>${getValStr('kolomCaraMendidikSkor')}% (${getValStr('kolomCaraMendidikKat')})</td>
+                        <td>Lingkungan pengasuhan berada pada tahap ${getValStr('kolomCaraMendidikKat').toLowerCase()}.</td>
+                    </tr>
+                    <tr>
+                        <td><b>Relasi Anak & Keluarga</b></td>
+                        <td>${getValStr('kolomRelasiSkor')}% (${getValStr('kolomRelasiKat')})</td>
+                        <td>Hubungan kekeluargaan berada pada tahap ${getValStr('kolomRelasiKat').toLowerCase()}.</td>
+                    </tr>
+                    <tr>
+                        <td><b>Suasana Rumah</b></td>
+                        <td>${getValStr('kolomSuasanaRumahSkor')}% (${getValStr('kolomSuasanaRumahKat')})</td>
+                        <td>Suasana lingkungan rumah ${getValStr('kolomSuasanaRumahKat').toLowerCase()}.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="pr-text" style="margin-top:10px;"><b>Saran untuk Keluarga:</b> Seiring bertambahnya usia, berikan ruang diskusi yang terbuka bagi anak. Hindari sikap menghakimi dan libatkan anak dalam kegiatan keluarga agar mereka merasakan peran serta tanggung jawabnya.</p>
+            `
+        });
+    }
+
+    let hasKes = isVal(siswa[colIndices.kolomKemandirianKat]);
+    let hasKeb = isVal(siswa[colIndices.kolomPRKat]);
+    if (hasKes || hasKeb) {
+        sections.push({
+            weight: 18,
+            html: `
+            <div class="pr-section-title-new">${secCount++}. KESEJAHTERAAN PSIKOLOGI & KEBIASAAN BELAJAR</div>
+            <div class="pr-grid-2" style="align-items: start;">
+                <div>
+                    <p class="text-bold" style="margin-bottom:5px; font-size:12px;">Kesejahteraan Psikologis:</p>
+                    <p class="pr-text">Tingkat kemandirian <b>(${getValStr('kolomKemandirianSkor')}%)</b>, penguasaan lingkungan <b>(${getValStr('kolomPenguasaanSkor')}%)</b>, dan tujuan hidup <b>(${getValStr('kolomTujuanSkor')}%)</b> terpantau dalam batas evaluasi saat asesmen dilakukan.</p>
+                </div>
+                <div>
+                    <p class="text-bold" style="margin-bottom:5px; font-size:12px;">Kebiasaan Belajar:</p>
+                    <p class="pr-text">Alokasi waktu <b>(${getValStr('kolomWaktuSkor')}%)</b>, pengerjaan PR <b>(${getValStr('kolomPRSkor')}%)</b>, serta konsentrasi <b>(${getValStr('kolomKonsentrasiSkor')}%)</b> mencerminkan profil belajar harian anak saat ini.</p>
+                </div>
+            </div>
+            `
+        });
+    }
+
+    if (isVal(siswa[colIndices.kolomDISC]) || isVal(siswa[colIndices.kolomPapi]) || isVal(siswa[colIndices.kolomKetahananDiri])) {
+        let addHtml = `<div class="pr-section-title-new">${secCount++}. ASESMEN TAMBAHAN</div><div class="pr-grid-3">`;
+        if (isVal(siswa[colIndices.kolomDISC])) {
+            addHtml += `<div><p class="text-bold" style="margin-bottom:5px; font-size:11px;">Analisis DISC:</p><p class="pr-text">Kategori Kepribadian DISC berada pada tipe <b>${getValStr('kolomDISC')}</b>.</p></div>`;
+        }
+        if (isVal(siswa[colIndices.kolomPapi])) {
+            addHtml += `<div><p class="text-bold" style="margin-bottom:5px; font-size:11px;">Papi Kostick:</p><p class="pr-text">Hasil kecenderungan profil berada pada <b>${getValStr('kolomPapi')}</b>.</p></div>`;
+        }
+        if (isVal(siswa[colIndices.kolomKetahananDiri])) {
+            addHtml += `<div><p class="text-bold" style="margin-bottom:5px; font-size:11px;">Ketahanan Diri (AQ):</p><p class="pr-text">Profil resiliensi masuk dalam kategori <b>${getValStr('kolomKetahananDiri')}</b>.</p></div>`;
+        }
+        addHtml += `</div>`;
+        
+        sections.push({
+            weight: 15,
+            html: addHtml
+        });
+    }
+
+    // 🔥 Sistem Pendistribusian Dinamis (Dynamic Chunking) YANG DIPERBAIKI 🔥
+    let maxWeight = 95; // Diturunkan agar margin bawah aman dan elemen mengisi penuh sebelum terpotong
+    let currentWeight = 0;
+    let pagesHtml = "";
+    
+    const miniHeader = `
+        <div style="border-bottom: 2px solid #000; padding-bottom: 8px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: flex-end;">
+            <div style="font-size: 14px; font-weight: bold; color: #000; text-transform: uppercase;">HASIL ASESMEN PSIKOLOGI</div>
+            <div style="font-size: 11px; color: #333; text-align: right;"><b>${getValStr('kolomNama')}</b> | ${getValStr('kolomKelas')} | ${sekolahName}</div>
+        </div>
+    `;
+
+    let activePage = `<div class="pdf-page">` + miniHeader;
+
+    for (let i = 0; i < sections.length; i++) {
+        let sec = sections[i];
+        if (currentWeight + sec.weight > maxWeight && currentWeight > 0) {
+            activePage += `</div>`;
+            pagesHtml += activePage;
+            
+            activePage = `<div class="pdf-page">` + miniHeader;
+            currentWeight = 0;
+        }
+        activePage += sec.html;
+        currentWeight += sec.weight;
+    }
+    
+    if (currentWeight > 0) {
+        activePage += `</div>`;
+        pagesHtml += activePage;
+    }
+
+    document.getElementById('laporan-isi').innerHTML = coverHtml + pagesHtml;
+
+ } else {
+ document.getElementById('laporan-kosong').style.display = 'block';
+ document.getElementById('laporan-isi').style.display = 'none';
+ }
+ // =========================================================================
+
+ // 🔥 AUTO-HIDE MENUS 🔥
+ const hasData = (obj) => Object.keys(obj).length > 0;
+ const toggleVisMenu = (id, show) => { const el = document.getElementById(id); if(el) el.style.display = show ? '' : 'none'; };
+ 
+ const hasAnyReportData = hasData(counts.minat) || hasData(counts.kepribadian) || hasData(counts.kecerdasan) || hasData(counts.tipeKecerdasan) || hasData(counts.gayaBelajar) || hasData(counts.ketahananDiri) || hasData(counts.disc) || hasData(counts.papi) ||
+ hasData(counts.kemandirian) || hasData(counts.penguasaan) || hasData(counts.pertumbuhan) || hasData(counts.hubungan) || hasData(counts.tujuan) || hasData(counts.penerimaan) ||
+ hasData(counts.pr) || hasData(counts.waktu) || hasData(counts.membaca) || hasData(counts.prosedur) || hasData(counts.konsentrasi) ||
+ hasData(counts.caraMendidik) || hasData(counts.relasi) || hasData(counts.suasanaRumah);
+ 
+ toggleVisMenu('wrap-report', hasAnyReportData);
+ 
+ toggleVisMenu('menu-minatbakat', hasData(counts.minat)); toggleVisMenu('menu-kepribadian', hasData(counts.kepribadian)); toggleVisMenu('menu-kecerdasan', hasData(counts.kecerdasan)); toggleVisMenu('menu-profil_kecerdasan', hasData(counts.tipeKecerdasan)); toggleVisMenu('menu-gaya', hasData(counts.gayaBelajar)); toggleVisMenu('menu-ketahanan', hasData(counts.ketahananDiri)); toggleVisMenu('menu-disc', hasData(counts.disc)); toggleVisMenu('menu-papi', hasData(counts.papi)); 
+
+ toggleVisMenu('menu-kemandirian', hasData(counts.kemandirian)); toggleVisMenu('menu-penguasaan', hasData(counts.penguasaan)); toggleVisMenu('menu-pertumbuhan', hasData(counts.pertumbuhan)); toggleVisMenu('menu-hubungan', hasData(counts.hubungan)); toggleVisMenu('menu-tujuan', hasData(counts.tujuan)); toggleVisMenu('menu-penerimaan', hasData(counts.penerimaan));
+ toggleVisMenu('menu-pr', hasData(counts.pr)); toggleVisMenu('menu-waktu', hasData(counts.waktu)); toggleVisMenu('menu-membaca', hasData(counts.membaca)); toggleVisMenu('menu-prosedur', hasData(counts.prosedur)); toggleVisMenu('menu-konsentrasi', hasData(counts.konsentrasi));
+ toggleVisMenu('menu-cara_mendidik', hasData(counts.caraMendidik)); toggleVisMenu('menu-relasi', hasData(counts.relasi)); toggleVisMenu('menu-suasana_rumah', hasData(counts.suasanaRumah));
+
+ const updateGrid = (id1, show1, id2, show2, class1, class2) => { let el1 = document.getElementById(id1); let el2 = document.getElementById(id2); if(el1) { el1.style.display = show1 ? '' : 'none'; el1.className = (show1 && !show2) ? 'col-md-12' : class1; } if(el2) { el2.style.display = show2 ? '' : 'none'; el2.className = (!show1 && show2) ? 'col-md-12' : class2; } };
+ let cardKepri = document.getElementById('card-kepribadian'); if(cardKepri) cardKepri.style.display = hasData(counts.kepribadian) ? '' : 'none';
+ updateGrid('card-kecerdasan', hasData(counts.kecerdasan), 'card-gaya', hasData(counts.gayaBelajar), 'col-md-7', 'col-md-5'); updateGrid('card-kesejahteraan', hasData(counts.kemandirian) || hasData(counts.penguasaan) || hasData(counts.pertumbuhan) || hasData(counts.hubungan) || hasData(counts.tujuan) || hasData(counts.penerimaan), 'card-kebiasaan', hasData(counts.pr) || hasData(counts.waktu) || hasData(counts.membaca) || hasData(counts.prosedur) || hasData(counts.konsentrasi), 'col-md-6', 'col-md-6'); updateGrid('card-lingkungan', hasData(counts.caraMendidik) || hasData(counts.relasi) || hasData(counts.suasanaRumah), 'card-profil', hasData(counts.minat), 'col-md-7', 'col-md-5'); updateGrid('card-ketahanan', hasData(counts.ketahananDiri), 'card-taraf', hasData(counts.tipeKecerdasan), 'col-md-6', 'col-md-6'); updateGrid('card-disc', hasData(counts.disc), 'card-papi', hasData(counts.papi), 'col-md-6', 'col-md-6'); 
+
+ if(hasData(counts.kepribadian)) renderSingleColumnChart(counts.kepribadian, 'chart_ringkasan_kepribadian', '#0d9488', 'Tipe Kepribadian', 'kepribadian', 'menu-kepribadian'); 
+ if(hasData(counts.kecerdasan)) renderSingleColumnChart(counts.kecerdasan, 'chart_ringkasan_kecerdasan', '#3b82f6', 'Kecerdasan', 'kecerdasan', 'menu-kecerdasan'); 
+ if(hasData(counts.gayaBelajar)) renderDonutChart(counts.gayaBelajar, 'chart_ringkasan_gaya', ['#06b6d4', '#ec4899', '#3b82f6'], 'gaya', 'menu-gaya'); 
+ if(hasData(counts.ketahananDiri)) renderDonutChart(counts.ketahananDiri, 'chart_ringkasan_ketahanan_diri', ['#10b981', '#f59e0b', '#ef4444'], 'ketahanan_diri', 'menu-ketahanan');
+ if(hasData(counts.disc)) renderDonutChart(counts.disc, 'chart_ringkasan_disc', ['#ef4444', '#f59e0b', '#10b981', '#3b82f6'], 'disc', 'menu-disc'); 
+ if(hasData(counts.papi)) renderSingleColumnChart(counts.papi, 'chart_ringkasan_papi', '#8b5cf6', 'Tipe Papi Kostick', 'papi', 'menu-papi'); 
+
+ const warnaRiasec = ['#3b82f6', '#ef4444', '#10b981', '#f59e0b', '#8b5cf6', '#ec4899']; 
+ const warnaTaraf = ['#06b6d4', '#f43f5e', '#eab308', '#22c55e', '#a855f7', '#f97316']; 
+
+ if(hasData(counts.minat)) renderDonutChart(counts.minat, 'chart_ringkasan_minat', warnaRiasec, 'minat', 'menu-minatbakat');
+ if(hasData(counts.tipeKecerdasan)) renderDonutChart(counts.tipeKecerdasan, 'chart_ringkasan_profil_kecerdasan', warnaTaraf, 'profil_kecerdasan', 'menu-profil_kecerdasan');
+
+ const buildGroupedData = (cols, legends) => {
+ let categories = new Set(); let rawCounts = {};
+ cols.forEach(col => { rawCounts[col] = {}; filteredRows.forEach(r => { if(colIndices[col] !== undefined) { let val = String(r[colIndices[col]]).trim(); if (isVal(val)) { categories.add(val); rawCounts[col][val] = (rawCounts[col][val] || 0) + 1; } } }); });
+ let catArray = Array.from(categories).sort(); let dataArray = [['Kategori', ...legends]];
+ catArray.forEach(cat => { let row = [cat]; cols.forEach(col => { row.push(rawCounts[col][cat] || 0); }); dataArray.push(row); });
+ if(dataArray.length === 1) { let emptyRow = ['Kosong']; cols.forEach(() => emptyRow.push(0)); dataArray.push(emptyRow); }
+ return dataArray;
+ };
+
+ let kesCols = []; let kesLeg = [];
+ if(hasData(counts.kemandirian)) { kesCols.push('kolomKemandirianKat'); kesLeg.push('Mandiri'); } if(hasData(counts.penguasaan)) { kesCols.push('kolomPenguasaanKat'); kesLeg.push('Penguasaan Lingk...'); } if(hasData(counts.pertumbuhan)) { kesCols.push('kolomPertumbuhanKat'); kesLeg.push('Pertumbuhan...'); } if(hasData(counts.hubungan)) { kesCols.push('kolomHubunganKat'); kesLeg.push('Hubungan...'); } if(hasData(counts.tujuan)) { kesCols.push('kolomTujuanKat'); kesLeg.push('Tujuan...'); } if(hasData(counts.penerimaan)) { kesCols.push('kolomPenerimaanKat'); kesLeg.push('Penerimaan...'); }
+ if(kesCols.length > 0) renderGroupedColumnChart(buildGroupedData(kesCols, kesLeg), 'chart_ringkasan_kesejahteraan', ['#3b82f6', '#06b6d4', '#ec4899', '#f59e0b', '#8b5cf6', '#10b981'].slice(0, kesCols.length));
+
+ let kebCols = []; let kebLeg = [];
+ if(hasData(counts.pr)) { kebCols.push('kolomPRKat'); kebLeg.push('PR dan Tugas'); } if(hasData(counts.waktu)) { kebCols.push('kolomWaktuKat'); kebLeg.push('Alokasi Waktu'); } if(hasData(counts.membaca)) { kebCols.push('kolomMembacaKat'); kebLeg.push('Membaca'); }
+ if(kebCols.length > 0) renderGroupedColumnChart(buildGroupedData(kebCols, kebLeg), 'chart_ringkasan_kebiasaan', ['#3b82f6', '#06b6d4', '#ec4899'].slice(0, kebCols.length));
+
+ let lingCols = []; let lingLeg = [];
+ if(hasData(counts.caraMendidik)) { lingCols.push('kolomCaraMendidikKat'); lingLeg.push('Cara Mendidik'); } if(hasData(counts.relasi)) { lingCols.push('kolomRelasiKat'); lingLeg.push('Relasi'); } if(hasData(counts.suasanaRumah)) { lingCols.push('kolomSuasanaRumahKat'); lingLeg.push('Suasana Rumah'); }
+ if(lingCols.length > 0) renderGroupedColumnChart(buildGroupedData(lingCols, lingLeg), 'chart_ringkasan_lingkungan', ['#3b82f6', '#06b6d4', '#ec4899'].slice(0, lingCols.length));
+
+ if(hasData(counts.minat)) renderReportMinatBakat(filteredRows, counts.minat, warnaRiasec);
+ if(hasData(counts.kepribadian)) renderReportKepribadian(filteredRows, counts.kepribadian);
+ if(hasData(counts.kecerdasan)) renderReportKecerdasan(filteredRows, counts.kecerdasan);
+ if(hasData(counts.gayaBelajar)) renderReportGayaBelajar(filteredRows, counts.gayaBelajar);
+ if(hasData(counts.disc)) renderReportDISC(filteredRows, counts.disc);
+ if(hasData(counts.papi)) renderGenericReport(filteredRows, counts.papi, 'papi', 'kolomPapi');
+
+ if(hasData(counts.tipeKecerdasan)) { renderDonutChart(counts.tipeKecerdasan, 'chart_profil_kecerdasan_detail', warnaTaraf, 'profil_kecerdasan'); const sumT = document.querySelector('#summary-profil_kecerdasan-table tbody'); if(sumT) { let shtml = []; Object.keys(counts.tipeKecerdasan).sort((a,b) => counts.tipeKecerdasan[b] - counts.tipeKecerdasan[a]).forEach(kat => { shtml.push(`<tr><td class="text-start">${kat}</td><td class="cell-score">${counts.tipeKecerdasan[kat]}</td></tr>`); }); sumT.innerHTML = shtml.join(''); } const detT = document.querySelector('#detail-profil_kecerdasan-table tbody'); if(detT) { let phtml = []; filteredRows.forEach(row => { let nama = colIndices.kolomNama !== undefined ? row[colIndices.kolomNama] : '-'; let jk = colIndices.kolomGender !== undefined ? row[colIndices.kolomGender] : '-'; let kelas = colIndices.kolomKelas !== undefined ? row[colIndices.kolomKelas] : '-'; let taraf = colIndices.kolomTarafKecerdasan !== undefined ? row[colIndices.kolomTarafKecerdasan] : '-'; let tipe = colIndices.kolomTipeKecerdasan !== undefined ? row[colIndices.kolomTipeKecerdasan] : '-'; if (isVal(taraf)) phtml.push(`<tr data-category="${tipe}"><td class="text-start">${nama}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kelas}</td><td class="cell-score" style="background-color: #f1f5f9">${taraf}</td><td style="font-weight:bold; color:#0d9488">${tipe}</td></tr>`); }); detT.innerHTML = phtml.join(''); } }
+ if(hasData(counts.ketahananDiri)) { renderDonutChart(counts.ketahananDiri, 'chart_ketahanan_diri_detail', ['#10b981', '#f59e0b', '#ef4444'], 'ketahanan_diri'); const sumK = document.querySelector('#summary-ketahanan_diri-table tbody'); if(sumK) { let shtml = []; Object.keys(counts.ketahananDiri).sort((a,b) => counts.ketahananDiri[b] - counts.ketahananDiri[a]).forEach(kat => { shtml.push(`<tr><td class="text-start">${kat}</td><td class="cell-score">${counts.ketahananDiri[kat]}</td></tr>`); }); sumK.innerHTML = shtml.join(''); } const detK = document.querySelector('#detail-ketahanan_diri-table tbody'); if(detK) { let dhtml = []; filteredRows.forEach(row => { let nama = colIndices.kolomNama !== undefined ? row[colIndices.kolomNama] : '-'; let jk = colIndices.kolomGender !== undefined ? row[colIndices.kolomGender] : '-'; let kelas = colIndices.kolomKelas !== undefined ? row[colIndices.kolomKelas] : '-'; let kategori = colIndices.kolomKetahananDiri !== undefined ? row[colIndices.kolomKetahananDiri] : '-'; let bgColor = '#f1f5f9'; let kLow = String(kategori).toLowerCase(); if (kLow.includes('tinggi') || kLow.includes('climber')) bgColor = '#d1fae5'; else if (kLow.includes('sedang') || kLow.includes('camper')) bgColor = '#fef3c7'; else if (kLow.includes('rendah') || kLow.includes('quitter')) bgColor = '#fee2e2'; if (isVal(kategori)) dhtml.push(`<tr data-category="${kategori}"><td class="text-start">${nama}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kelas}</td><td class="cell-score" style="background-color: ${bgColor};">${kategori}</td></tr>`); }); detK.innerHTML = dhtml.join(''); } }
+
+ if(hasData(counts.kemandirian)) renderSubKategori(filteredRows, counts.kemandirian, 'kemandirian', 'kolomKemandirianSkor', 'kolomKemandirianKat'); if(hasData(counts.penguasaan)) renderSubKategori(filteredRows, counts.penguasaan, 'penguasaan', 'kolomPenguasaanSkor', 'kolomPenguasaanKat'); if(hasData(counts.pertumbuhan)) renderSubKategori(filteredRows, counts.pertumbuhan, 'pertumbuhan', 'kolomPertumbuhanSkor', 'kolomPertumbuhanKat'); if(hasData(counts.hubungan)) renderSubKategori(filteredRows, counts.hubungan, 'hubungan', 'kolomHubunganSkor', 'kolomHubunganKat'); if(hasData(counts.tujuan)) renderSubKategori(filteredRows, counts.tujuan, 'tujuan', 'kolomTujuanSkor', 'kolomTujuanKat'); if(hasData(counts.penerimaan)) renderSubKategori(filteredRows, counts.penerimaan, 'penerimaan', 'kolomPenerimaanSkor', 'kolomPenerimaanKat');
+ if(hasData(counts.pr)) renderSubKategori(filteredRows, counts.pr, 'pr', 'kolomPRSkor', 'kolomPRKat'); if(hasData(counts.waktu)) renderSubKategori(filteredRows, counts.waktu, 'waktu', 'kolomWaktuSkor', 'kolomWaktuKat'); if(hasData(counts.membaca)) renderSubKategori(filteredRows, counts.membaca, 'membaca', 'kolomMembacaSkor', 'kolomMembacaKat'); if(hasData(counts.prosedur)) renderSubKategori(filteredRows, counts.prosedur, 'prosedur', 'kolomProsedurSkor', 'kolomProsedurKat'); if(hasData(counts.konsentrasi)) renderSubKategori(filteredRows, counts.konsentrasi, 'konsentrasi', 'kolomKonsentrasiSkor', 'kolomKonsentrasiKat');
+ if(hasData(counts.caraMendidik)) renderSubKategori(filteredRows, counts.caraMendidik, 'cara_mendidik', 'kolomCaraMendidikSkor', 'kolomCaraMendidikKat'); if(hasData(counts.relasi)) renderSubKategori(filteredRows, counts.relasi, 'relasi', 'kolomRelasiSkor', 'kolomRelasiKat'); if(hasData(counts.suasanaRumah)) renderSubKategori(filteredRows, counts.suasanaRumah, 'suasana_rumah', 'kolomSuasanaRumahSkor', 'kolomSuasanaRumahKat');
+ }
+
+ window.resetTable = function(prefix) { try { $('#detail-' + prefix + '-table tbody tr').show(); if(window.globalCharts['mychart_chart_ringkasan_' + prefix]) window.globalCharts['mychart_chart_ringkasan_' + prefix].setSelection([]); if(window.globalCharts['mychart_chart_' + prefix + '_detail']) window.globalCharts['mychart_chart_' + prefix + '_detail'].setSelection([]); } catch (e) { console.log(e); } };
+
+ function renderSingleColumnChart(frequencyObj, elementId, colorHex, xLabel, prefix, menuId) { if(!document.getElementById(elementId)) return; const dataArray = [[xLabel, 'Jumlah', { role: 'style' }]]; const sortedKeys = Object.keys(frequencyObj).sort((a,b) => frequencyObj[b] - frequencyObj[a]); sortedKeys.forEach(key => dataArray.push([key, frequencyObj[key], `color: ${colorHex}`])); if (dataArray.length === 1) dataArray.push(['Kosong', 0, `color: ${colorHex}`]); const chart = new google.visualization.ColumnChart(document.getElementById(elementId)); if (prefix) window.globalCharts['mychart_' + elementId] = chart; if (prefix) { google.visualization.events.addListener(chart, 'select', function() { const sel = chart.getSelection(); const tbody = document.querySelector('#detail-' + prefix + '-table tbody'); if (sel.length > 0 && sel[0].row !== null && sel[0].row !== undefined && tbody) { const category = sortedKeys[sel[0].row]; if (elementId.includes('ringkasan') && menuId) navTo(menuId); $(tbody).find('tr').hide(); $(tbody).find('tr').each(function() { if($(this).attr('data-category') === String(category)) $(this).fadeIn(200); }); } else if (tbody) { $(tbody).find('tr').fadeIn(200); } }); } setTimeout(() => { chart.draw(google.visualization.arrayToDataTable(dataArray), getChartOptions('single', true)); }, 50); }
+ function renderGroupedColumnChart(dataArray, elementId, colorPalette) { if(!document.getElementById(elementId)) return; const chart = new google.visualization.ColumnChart(document.getElementById(elementId)); let opts = getChartOptions('grouped', true); opts.colors = colorPalette; setTimeout(() => { chart.draw(google.visualization.arrayToDataTable(dataArray), opts); }, 50); }
+ function renderDonutChart(frequencyObj, elementId, colorPalette, prefix, menuId) { if(!document.getElementById(elementId)) return; const dataArray = [['Kategori', 'Jumlah']]; const keys = []; for (let key in frequencyObj) { dataArray.push([key, frequencyObj[key]]); keys.push(key); } if (dataArray.length === 1) dataArray.push(['Kosong', 1]); const chart = new google.visualization.PieChart(document.getElementById(elementId)); if (prefix) window.globalCharts['mychart_' + elementId] = chart; if (prefix) { google.visualization.events.addListener(chart, 'select', function() { const sel = chart.getSelection(); const tbody = document.querySelector('#detail-' + prefix + '-table tbody'); if (sel.length > 0 && sel[0].row !== null && sel[0].row !== undefined && tbody) { const category = keys[sel[0].row]; if (elementId.includes('ringkasan') && menuId) navTo(menuId); $(tbody).find('tr').hide(); $(tbody).find('tr').each(function() { if($(this).attr('data-category') === String(category)) $(this).fadeIn(200); }); } else if (tbody) { $(tbody).find('tr').fadeIn(200); } }); } let opts = getChartOptions('donut', true); opts.colors = colorPalette; setTimeout(() => { chart.draw(google.visualization.arrayToDataTable(dataArray), opts); }, 50); }
+ function renderReportDISC(filteredRows, dataKategori) { renderDonutChart(dataKategori, 'chart_disc_detail', ['#ef4444', '#f59e0b', '#10b981', '#3b82f6'], 'disc', 'menu-disc'); const summaryBody = document.querySelector('#summary-disc-table tbody'); if(summaryBody) { let shtml = []; Object.keys(dataKategori).sort((a,b)=>dataKategori[b]-dataKategori[a]).forEach(k => { shtml.push(`<tr><td class="text-start">${k}</td><td class="cell-score">${dataKategori[k]}</td></tr>`); }); summaryBody.innerHTML = shtml.join(''); } const detailBody = document.querySelector('#detail-disc-table tbody'); if(detailBody) { let dhtml = []; filteredRows.forEach(r => { const getVal = (key) => colIndices[key] !== undefined ? r[colIndices[key]] : '-'; let n = getVal('kolomNama'); let kl = getVal('kolomKelas'); let jk = getVal('kolomGender'); let kd = getVal('k_d'); let ki = getVal('k_i'); let ks = getVal('k_s'); let kc = getVal('k_c'); let pd = getVal('p_d'); let pi = getVal('p_i'); let ps = getVal('p_s'); let pc = getVal('p_c'); let hasil = getVal('kolomDISC'); if (isVal(hasil)) dhtml.push(`<tr data-category="${hasil}"><td class="text-start" style="white-space:nowrap;">${n}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kl}</td><td class="cell-score" style="background-color: #f1f5f9">${kd}</td><td class="cell-score" style="background-color: #f1f5f9">${ki}</td><td class="cell-score" style="background-color: #f1f5f9">${ks}</td><td class="cell-score" style="background-color: #f1f5f9">${kc}</td><td class="cell-score" style="background-color: #f1f5f9">${pd}</td><td class="cell-score" style="background-color: #f1f5f9">${pi}</td><td class="cell-score" style="background-color: #f1f5f9">${ps}</td><td class="cell-score" style="background-color: #f1f5f9">${pc}</td><td style="font-weight:bold; background-color: #0d9488; color:#fff">${hasil}</td></tr>`); }); detailBody.innerHTML = dhtml.join(''); } }
+ function renderGenericReport(filteredRows, dataKategori, prefix, keyKolom) { renderDonutChart(dataKategori, 'chart_'+prefix+'_detail', ['#ef4444', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6'], prefix, 'menu-'+prefix); const summaryBody = document.querySelector('#summary-'+prefix+'-table tbody'); if(summaryBody) { let shtml = []; Object.keys(dataKategori).sort((a,b)=>dataKategori[b]-dataKategori[a]).forEach(k => { shtml.push(`<tr><td class="text-start">${k}</td><td class="cell-score">${dataKategori[k]}</td></tr>`); }); summaryBody.innerHTML = shtml.join(''); } const detailBody = document.querySelector('#detail-'+prefix+'-table tbody'); if(detailBody) { let dhtml = []; filteredRows.forEach(r => { let n = colIndices.kolomNama !== undefined ? r[colIndices.kolomNama] : '-'; let kl = colIndices.kolomKelas !== undefined ? r[colIndices.kolomKelas] : '-'; let jk = colIndices.kolomGender !== undefined ? r[colIndices.kolomGender] : '-'; let hasil = colIndices[keyKolom] !== undefined ? r[colIndices[keyKolom]] : '-'; if (isVal(hasil)) dhtml.push(`<tr data-category="${hasil}"><td class="text-start">${n}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kl}</td><td class="cell-score" style="background-color: #0d9488; color:#fff">${hasil}</td></tr>`); }); detailBody.innerHTML = dhtml.join(''); } }
+ function renderReportMinatBakat(filteredRows, dataKategori, customColors) { renderDonutChart(dataKategori, 'chart_minat_detail', customColors, 'minat', 'menu-minatbakat'); const summaryBody = document.querySelector('#summary-minat-table tbody'); if(summaryBody) { let shtml = []; Object.keys(dataKategori).sort((a,b)=>dataKategori[b]-dataKategori[a]).forEach(k => { shtml.push(`<tr><td class="text-start">${k}</td><td class="cell-score">${dataKategori[k]}</td></tr>`); }); summaryBody.innerHTML = shtml.join(''); } const detailBody = document.querySelector('#detail-minat-table tbody'); if(detailBody) { let dhtml = []; filteredRows.forEach(r => { let n = colIndices.kolomNama !== undefined ? r[colIndices.kolomNama] : '-'; let kl = colIndices.kolomKelas !== undefined ? r[colIndices.kolomKelas] : '-'; let jk = colIndices.kolomGender !== undefined ? r[colIndices.kolomGender] : '-'; let rl = colIndices.kolomReal !== undefined ? r[colIndices.kolomReal] : '-'; let inv = colIndices.kolomInv !== undefined ? r[colIndices.kolomInv] : '-'; let art = colIndices.kolomArt !== undefined ? r[colIndices.kolomArt] : '-'; let soc = colIndices.kolomSoc !== undefined ? r[colIndices.kolomSoc] : '-'; let ent = colIndices.kolomEnt !== undefined ? r[colIndices.kolomEnt] : '-'; let conv = colIndices.kolomConv !== undefined ? r[colIndices.kolomConv] : '-'; let tf = colIndices.kolomTipeRIASEC !== undefined ? r[colIndices.kolomTipeRIASEC] : '-'; if (isVal(tf)) dhtml.push(`<tr data-category="${tf}"><td class="text-start">${n}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kl}</td><td class="cell-score" style="background-color: #f1f5f9">${rl}</td><td class="cell-score" style="background-color: #f1f5f9">${inv}</td><td class="cell-score" style="background-color: #f1f5f9">${art}</td><td class="cell-score" style="background-color: #f1f5f9">${soc}</td><td class="cell-score" style="background-color: #f1f5f9">${ent}</td><td class="cell-score" style="background-color: #f1f5f9">${conv}</td><td style="font-weight:bold; color:#0d9488">${tf}</td></tr>`); }); detailBody.innerHTML = dhtml.join(''); } }
+ function renderSubKategori(filteredRows, dataKategori, prefix, keySkor, keyKategori) { renderDonutChart(dataKategori, 'chart_'+prefix+'_detail', ['#3b82f6', '#06b6d4', '#ec4899', '#f59e0b'], prefix, 'menu-'+prefix); const summaryTableBody = document.querySelector('#summary-'+prefix+'-table tbody'); if(summaryTableBody){ let shtml = []; Object.keys(dataKategori).sort((a,b) => dataKategori[b] - dataKategori[a]).forEach(kat => { shtml.push(`<tr><td class="text-start">${kat}</td><td class="cell-score">${dataKategori[kat]}</td></tr>`); }); summaryTableBody.innerHTML = shtml.join(''); } const detailTableBody = document.querySelector('#detail-'+prefix+'-table tbody'); if(detailTableBody){ let dhtml = []; filteredRows.forEach(row => { let nama = colIndices.kolomNama !== undefined ? row[colIndices.kolomNama] : '-'; let jk = colIndices.kolomGender !== undefined ? row[colIndices.kolomGender] : '-'; let kelas = colIndices.kolomKelas !== undefined ? row[colIndices.kolomKelas] : '-'; let kategori = colIndices[keyKategori] !== undefined ? row[colIndices[keyKategori]] : '-'; let skor = colIndices[keySkor] !== undefined ? row[colIndices[keySkor]] : '0'; let bgColor = '#f1f5f9'; let katLower = String(kategori).toLowerCase(); if (katLower.includes('sangat')) bgColor = '#ccfbf1'; else if (katLower.includes('sesuai')) bgColor = '#e0f2fe'; else if (katLower.includes('sedang')) bgColor = 'rgba(245, 158, 11, 0.15)'; else if (katLower.includes('mulai')) bgColor = '#fee2e2'; if (isVal(kategori)) dhtml.push(`<tr data-category="${kategori}"><td class="text-start" style="white-space:nowrap;">${nama}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kelas}</td><td>${kategori}</td><td class="cell-score" style="background-color: ${bgColor};">${skor}</td></tr>`); }); detailTableBody.innerHTML = dhtml.join(''); } }
+ function renderReportKepribadian(filteredRows, dataKepribadian) { renderSingleColumnChart(dataKepribadian, 'chart_kepribadian_detail', '#f59e0b', 'Tipe', 'kepribadian', 'menu-kepribadian'); const summaryTableBody = document.querySelector('#summary-kepribadian-table tbody'); if(!summaryTableBody) return; let shtml = []; Object.keys(dataKepribadian).sort((a,b) => dataKepribadian[b] - dataKepribadian[a]).forEach(tipe => { shtml.push(`<tr><td class="text-start">${tipe}</td><td class="cell-score">${dataKepribadian[tipe]}</td></tr>`); }); summaryTableBody.innerHTML = shtml.join(''); const detailTableBody = document.querySelector('#detail-kepribadian-table tbody'); let dhtml = []; filteredRows.forEach(row => { let nama = colIndices.kolomNama !== undefined ? row[colIndices.kolomNama] : '-'; let jk = colIndices.kolomGender !== undefined ? row[colIndices.kolomGender] : '-'; let kelas = colIndices.kolomKelas !== undefined ? row[colIndices.kolomKelas] : '-'; let tipe = colIndices.kolomKepribadian !== undefined ? row[colIndices.kolomKepribadian] : '-'; const getCell = (colKey, bgColor) => { let val = colIndices[colKey] !== undefined ? row[colIndices[colKey]] : '-'; let colorStyle = isVal(val) ? `background-color: ${bgColor};` : ''; return `<td class="cell-score" style="${colorStyle}">${val}</td>`; }; if (isVal(tipe)) dhtml.push(`<tr data-category="${tipe}"><td class="text-start" style="white-space:nowrap;">${nama}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kelas}</td>${getCell('kolomE', '#f1f5f9')}${getCell('kolomI', '#f1f5f9')}${getCell('kolomS', '#f1f5f9')}${getCell('kolomN', '#f1f5f9')}${getCell('kolomT', '#f1f5f9')}${getCell('kolomF', '#f1f5f9')}${getCell('kolomJ', '#f1f5f9')}${getCell('kolomP', '#f1f5f9')}<td style="font-weight:bold; color:#0d9488;">${tipe}</td></tr>`); }); detailTableBody.innerHTML = dhtml.join(''); }
+ function renderReportKecerdasan(filteredRows, dataKecerdasan) { renderSingleColumnChart(dataKecerdasan, 'chart_kecerdasan_detail', '#3b82f6', 'Kecerdasan', 'kecerdasan', 'menu-kecerdasan'); const summaryTableBody = document.querySelector('#summary-kecerdasan-table tbody'); if(!summaryTableBody) return; let shtml = []; Object.keys(dataKecerdasan).sort((a,b) => dataKecerdasan[b] - dataKecerdasan[a]).forEach(kec => { shtml.push(`<tr><td class="text-start">${kec}</td><td class="cell-score">${dataKecerdasan[kec]}</td></tr>`); }); summaryTableBody.innerHTML = shtml.join(''); const detailTableBody = document.querySelector('#detail-kecerdasan-table tbody'); let dhtml = []; filteredRows.forEach(row => { let nama = colIndices.kolomNama !== undefined ? row[colIndices.kolomNama] : '-'; let jk = colIndices.kolomGender !== undefined ? row[colIndices.kolomGender] : '-'; let kelas = colIndices.kolomKelas !== undefined ? row[colIndices.kolomKelas] : '-'; let tipe = colIndices.kolomKecerdasanMajemuk !== undefined ? row[colIndices.kolomKecerdasanMajemuk] : '-'; const getCell = (colKey, bgColor) => { let val = colIndices[colKey] !== undefined ? row[colIndices[colKey]] : '-'; let colorStyle = isVal(val) ? `background-color: ${bgColor};` : ''; return `<td class="cell-score" style="${colorStyle}">${val}</td>`; }; if (isVal(tipe)) dhtml.push(`<tr data-category="${tipe}"><td class="text-start" style="white-space:nowrap;">${nama}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kelas}</td>${getCell('kolomLing', '#f1f5f9')}${getCell('kolomMat', '#f1f5f9')}${getCell('kolomSpa', '#f1f5f9')}${getCell('kolomKin', '#f1f5f9')}${getCell('kolomMus', '#f1f5f9')}${getCell('kolomInter', '#f1f5f9')}${getCell('kolomIntra', '#f1f5f9')}${getCell('kolomNat', '#f1f5f9')}<td style="font-weight:bold; color:#0d9488;">${tipe}</td></tr>`); }); detailTableBody.innerHTML = dhtml.join(''); }
+ function renderReportGayaBelajar(filteredRows, dataGaya) { renderDonutChart(dataGaya, 'chart_gaya_detail', ['#3b82f6', '#ec4899', '#06b6d4'], 'gaya', 'menu-gaya'); const summaryTableBody = document.querySelector('#summary-gaya-table tbody'); if(!summaryTableBody) return; let shtml = []; Object.keys(dataGaya).sort((a,b) => dataGaya[b] - dataGaya[a]).forEach(gaya => { shtml.push(`<tr><td class="text-start">${gaya}</td><td class="cell-score">${dataGaya[gaya]}</td></tr>`); }); summaryTableBody.innerHTML = shtml.join(''); const detailTableBody = document.querySelector('#detail-gaya-table tbody'); let dhtml = []; filteredRows.forEach(row => { let nama = colIndices.kolomNama !== undefined ? row[colIndices.kolomNama] : '-'; let jk = colIndices.kolomGender !== undefined ? row[colIndices.kolomGender] : '-'; let kelas = colIndices.kolomKelas !== undefined ? row[colIndices.kolomKelas] : '-'; let tipe = colIndices.kolomGayaBelajar !== undefined ? row[colIndices.kolomGayaBelajar] : '-'; const getCell = (colKey, bgColor) => { let val = colIndices[colKey] !== undefined ? row[colIndices[colKey]] : '-'; let colorStyle = isVal(val) ? `background-color: ${bgColor};` : ''; return `<td class="cell-score" style="${colorStyle}">${val}</td>`; }; if (isVal(tipe)) dhtml.push(`<tr data-category="${tipe}"><td class="text-start" style="white-space:nowrap;">${nama}</td><td>${String(jk).charAt(0).toUpperCase()}</td><td>${kelas}</td>${getCell('kolomVis', '#f1f5f9')}${getCell('kolomAud', '#f1f5f9')}${getCell('kolomKines', '#f1f5f9')}<td style="font-weight:bold; color:#0d9488;">${tipe}</td></tr>`); }); detailTableBody.innerHTML = dhtml.join(''); }
+
+ // 🔥 OPTIMALISASI RESIZE DEBOUNCE
+ let resizeTimer;
+ window.addEventListener('resize', function() {
+ clearTimeout(resizeTimer);
+ resizeTimer = setTimeout(function() {
+ if (allRows && allRows.length > 0 && document.visibilityState === 'visible') { updateDashboard(); }
+ }, 300);
+ });
+ document.addEventListener("visibilitychange", function() { if (document.visibilityState === 'visible' && allRows && allRows.length > 0) { window.dispatchEvent(new Event('resize')); } });
+
+ // 🔥 FUNGSI UPLOAD EXCEL (KHUSUS SUPER ADMIN) 🔥
+ function prosesUploadExcel() {
+ const fileInput = document.getElementById('input-excel-file');
+ const mode = document.getElementById('select-upload-mode').value;
+ const btnProses = document.getElementById('btn-proses-upload');
+
+ if (!fileInput.files || fileInput.files.length === 0) {
+ addLog('log-upload', "Pilih file Excel terlebih dahulu!", false); return;
+ }
+
+ const file = fileInput.files[0];
+ const reader = new FileReader();
+
+ addLog('log-upload', "Membaca file Excel di browser...", true);
+ btnProses.disabled = true;
+
+ reader.onload = function(e) {
+ try {
+ const data = new Uint8Array(e.target.result);
+ const workbook = XLSX.read(data, { type: 'array' });
+ 
+ let allUploadedRows = []; let headerRow = null; let headerKeys = [];
+
+ for (let i = 0; i < workbook.SheetNames.length; i++) {
+ const sheetName = workbook.SheetNames[i];
+ if (sheetName === "AkunSekolah" || sheetName === "AkunRole") continue;
+ 
+ const ws = workbook.Sheets[sheetName];
+ const sheetData = XLSX.utils.sheet_to_json(ws, { header: 1, defval: "" });
+ 
+ if (sheetData.length > 1) {
+ const headers = sheetData[0].map(h => String(h).trim()); const headersLower = headers.map(h => h.toLowerCase()); const idxNamaSekolah = headersLower.indexOf('nama sekolah');
+ 
+ if (idxNamaSekolah !== -1) {
+ if (!headerRow) { headerRow = headers; headerKeys = headersLower; }
+ 
+ for(let r = 1; r < sheetData.length; r++) {
+ const row = sheetData[r];
+ if (row.length > 0 && row.join("").trim() !== "") {
+ let alignedRow = [];
+ for (let k = 0; k < headerKeys.length; k++) {
+ let localIdx = headersLower.indexOf(headerKeys[k]);
+ if (localIdx !== -1 && localIdx < row.length) { alignedRow.push(row[localIdx]); } else { alignedRow.push(""); }
+ }
+ allUploadedRows.push(alignedRow);
+ }
+ }
+ }
+ }
+ }
+
+ if (!headerRow) { throw new Error("Kolom 'Nama Sekolah' tidak ditemukan di seluruh sheet Excel!"); }
+ if (allUploadedRows.length === 0) { throw new Error("File Excel valid, tetapi sama sekali tidak ada baris data!"); }
+
+ const dataRows = [headerRow, ...allUploadedRows];
+ addLog('log-upload', "Mengirim " + allUploadedRows.length + " data ke database server...", true);
+
+ callGAS("uploadDataSiswa", { rowsData: dataRows, mode: mode })
+ .then(function(res) {
+ btnProses.disabled = false;
+ if (res.success) {
+ addLog('log-upload', res.message, true);
+ fileInput.value = ''; 
+ // Refresh dashboard data automatically
+ callGAS("getSchoolData", { namaSekolah: sessionSekolah }).then(function(jsonString) { initDashboard(jsonString); });
+ } else {
+ addLog('log-upload', "Error: " + res.message, false);
+ }
+ })
+ .catch(function(err) { btnProses.disabled = false; addLog('log-upload', "System Error: " + err.message, false); });
+ } catch (err) { btnProses.disabled = false; addLog('log-upload', "File Error: " + err.message, false); }
+ };
+ reader.readAsArrayBuffer(file);
+ }
+
+ // 🔥 FUNGSI SUBMIT CREATE USER (BUAT AKUN SEKOLAH INDUK) 🔥
+ function submitNewUser() {
+ const email = document.getElementById('new-email').value; const password = document.getElementById('new-password').value; const namaSekolah = document.getElementById('new-namasekolah').value; const urlLogo = document.getElementById('new-urllogo').value; const istPelajar = document.getElementById('new-istpelajar').value; const istKelas = document.getElementById('new-istkelas').value; 
+ if (!email || !password || !namaSekolah) { addLog('log-buat-akun', "Email, Password, dan Nama Sekolah wajib diisi!", false); return; }
+ 
+ addLog('log-buat-akun', "Mengirim permintaan pembuatan akun ke server...", true);
+ const userData = { email, password, namaSekolah, urlLogo, istPelajar, istKelas };
+ 
+ callGAS("createUserAccount", { userData: userData })
+ .then(function(res) {
+ if (res.success) {
+ addLog('log-buat-akun', res.message, true);
+ document.getElementById('new-email').value = ''; document.getElementById('new-password').value = ''; document.getElementById('new-namasekolah').value = ''; document.getElementById('new-urllogo').value = '';
+ } else { addLog('log-buat-akun', "Gagal: " + res.message, false); }
+ })
+ .catch(function(err) { addLog('log-buat-akun', "System Error: " + err.message, false); });
+ }
+
+ // 🔥 FUNGSI SUBMIT CREATE ROLE (STAFF KHUSUS) 🔥
+ function submitNewRole() {
+ const namaGuru = document.getElementById('role-nama').value;
+ const sekolah = document.getElementById('role-sekolah').value;
+ const user = document.getElementById('role-user').value;
+ const pass = document.getElementById('role-password').value;
+ const tipe = document.getElementById('role-tipe').value;
+ const aksesKelas = document.getElementById('role-kelas').value;
+
+ if (!namaGuru || !sekolah || !user || !pass) {
+     addLog('log-buat-role', "Semua kolom wajib diisi (kecuali Akses Kelas)!", false);
+     return;
+ }
+
+ addLog('log-buat-role', "Memproses pendaftaran role staff baru...", true);
+
+ let arrAkses = [];
+ if (aksesKelas.trim() !== "") {
+     arrAkses = aksesKelas.split(',').map(s => s.trim()).filter(s => s !== "");
+ }
+
+ const roleData = { namaGuru, sekolah, user, pass, tipe, kelasAkses: arrAkses };
+
+ callGAS("createRoleAccount", { roleData: roleData })
+ .then(function(res) {
+     if (res.success) {
+         addLog('log-buat-role', res.message, true);
+         document.getElementById('role-nama').value = '';
+         document.getElementById('role-sekolah').value = '';
+         document.getElementById('role-user').value = '';
+         document.getElementById('role-password').value = '';
+         document.getElementById('role-kelas').value = '';
+     } else {
+         addLog('log-buat-role', "Gagal: " + res.message, false);
+     }
+ })
+ .catch(function(err) {
+     addLog('log-buat-role', "System Error: " + err.message, false);
+ });
+ }
+
+ // 🔥 FUNGSI MEMBUKA MODAL DOWNLOAD PDF 🔥
+ function openDownloadModal() {
+    const fSekolah = $('#filter-sekolah').val() || sessionSekolah; 
+    const fKelas = $('#filter-kelas').val();
+    const fNama = $('#filter-nama').val(); // Cek filter nama
+
+    if (!fSekolah || !fKelas) { alert("⚠️ Silakan pilih Sekolah dan Grup/Kelas di filter terlebih dahulu!"); return; }
+    let students = allRows.filter(r => String(r[colIndices.kolomNamaSekolah]).trim() === fSekolah && String(r[colIndices.kolomKelas]).trim() === fKelas);
+    students = students.filter(r => r[colIndices.kolomNama] && String(r[colIndices.kolomNama]).trim() !== "");
+    if (students.length === 0) { alert("⚠️ Tidak ada data siswa yang valid di kelas ini."); return; }
+
+    // Tampilkan tombol Download Individu jika ada nama yang di-filter
+    const btnIndividu = document.getElementById('btn-download-individu');
+    if (btnIndividu) {
+        if (fNama && fNama !== "") {
+            btnIndividu.style.display = 'inline-block';
+            btnIndividu.innerText = "Download " + fNama;
+        } else {
+            btnIndividu.style.display = 'none';
+        }
+    }
+
+    const modal = new bootstrap.Modal(document.getElementById('modalDownloadPDF')); 
+    modal.show();
+ }
+
+ // 🔥 FUNGSI PROSES DOWNLOAD PDF INDIVIDU LANGSUNG (1 SISWA) 🔥
+ async function prosesDownloadPDFIndividu() {
+    const selectedPages = Array.from(document.querySelectorAll('.page-checkbox:checked')).map(cb => parseInt(cb.value));
+    if (selectedPages.length === 0) { alert("⚠️ Silakan centang minimal 1 halaman untuk di-download."); return; }
+
+    const fNama = $('#filter-nama').val();
+    if (!fNama) { alert("⚠️ Tidak ada nama siswa yang dipilih!"); return; }
+
+    const modalEl = document.getElementById('modalDownloadPDF'); 
+    const modal = bootstrap.Modal.getInstance(modalEl); 
+    if (modal) modal.hide();
+
+    document.getElementById('loading').style.display = 'block'; 
+    const loadingText = document.querySelector('#loading span');
+    loadingText.innerHTML = `Memproses PDF: <b>${fNama}</b><br><small style="color:#0d9488;">Mohon tunggu sebentar...</small>`;
+
+    navTo('menu-laporan-individu');
+
+    // Jeda sejenak agar UI HTML selesai render sempurna sebelum difoto
+    await new Promise(r => setTimeout(r, 1000));
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    let isFirstPage = true;
+
+    const pagesToRender = document.querySelectorAll('.pdf-page');
+
+    for (let p = 0; p < pagesToRender.length; p++) {
+        if (!selectedPages.includes(p)) continue;
+
+        const pageEl = pagesToRender[p];
+        if (pageEl.offsetHeight < 50 || window.getComputedStyle(pageEl).display === 'none') continue;
+
+        const prevShadow = pageEl.style.boxShadow; const prevMargin = pageEl.style.margin; const prevBorderRadius = pageEl.style.borderRadius;
+        pageEl.style.boxShadow = 'none'; pageEl.style.margin = '0'; pageEl.style.borderRadius = '0';
+        
+        const canvas = await html2canvas(pageEl, { scale: 2, useCORS: true, logging: false });
+        
+        pageEl.style.boxShadow = prevShadow; pageEl.style.margin = prevMargin; pageEl.style.borderRadius = prevBorderRadius;
+
+        const imgData = canvas.toDataURL('image/jpeg', 0.95);
+        const imgProps = doc.getImageProperties(imgData);
+        const renderedImgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        if (!isFirstPage) { doc.addPage(); } else { isFirstPage = false; }
+        doc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, renderedImgHeight);
+    }
+
+    const safeFileName = fNama.replace(/[^a-zA-Z0-9 _-]/g, "") + ".pdf";
+    doc.save(safeFileName);
+
+    loadingText.innerHTML = "Memuat Data <span id='load-sekolah'></span>...";
+    document.getElementById('loading').style.display = 'none';
+ }
+
+ // 🔥 FUNGSI PROSES DOWNLOAD PDF MASSAL KE ZIP (SEMUA SISWA DI KELAS) 🔥
+ async function prosesDownloadPDFZip() {
+    const selectedPages = Array.from(document.querySelectorAll('.page-checkbox:checked')).map(cb => parseInt(cb.value));
+    if (selectedPages.length === 0) { alert("⚠️ Silakan centang minimal 1 halaman untuk di-download."); return; }
+
+    const fSekolah = $('#filter-sekolah').val() || sessionSekolah; const fKelas = $('#filter-kelas').val();
+    let students = allRows.filter(r => String(r[colIndices.kolomNamaSekolah]).trim() === fSekolah && String(r[colIndices.kolomKelas]).trim() === fKelas);
+    students = students.filter(r => r[colIndices.kolomNama] && String(r[colIndices.kolomNama]).trim() !== "");
+
+    if (!confirm(`Terdapat ${students.length} siswa di kelas ${fKelas}.\n\nSistem akan membuat laporan PDF RAPI (${selectedPages.length} Halaman per siswa) untuk masing-masing siswa dan membungkusnya ke dalam 1 file ZIP.\n\nProses ini berjalan otomatis. Lanjutkan?`)) { return; }
+
+    const modalEl = document.getElementById('modalDownloadPDF'); const modal = bootstrap.Modal.getInstance(modalEl); if (modal) modal.hide();
+
+    document.getElementById('loading').style.display = 'block'; const loadingText = document.querySelector('#loading span');
+    navTo('menu-laporan-individu'); const originalName = $('#filter-nama').val();
+
+    const { jsPDF } = window.jspdf; const zip = new JSZip();
+    const safeFolderName = `Laporan_${fSekolah}_${fKelas}`.replace(/[^a-zA-Z0-9_-]/g, "_");
+    const folder = zip.folder(safeFolderName);
+
+    for (let i = 0; i < students.length; i++) {
+        const studentName = String(students[i][colIndices.kolomNama]).trim();
+        const safeFileName = studentName.replace(/[^a-zA-Z0-9 _-]/g, "") + ".pdf";
+        
+        loadingText.innerHTML = `Memproses PDF Rapi: <b>${i + 1} dari ${students.length} Siswa</b><br><small style="color:#0d9488;">Siswa: ${studentName}</small>`;
+        $('#filter-nama').val(studentName).trigger('change');
+        
+        await new Promise(r => setTimeout(r, 1200));
+
+        const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4', compress: true });
+        const pdfWidth = doc.internal.pageSize.getWidth();
+        let isFirstPage = true;
+
+        const pagesToRender = document.querySelectorAll('.pdf-page');
+
+        for (let p = 0; p < pagesToRender.length; p++) {
+            if (!selectedPages.includes(p)) continue;
+
+            const pageEl = pagesToRender[p];
+            if (pageEl.offsetHeight < 50 || window.getComputedStyle(pageEl).display === 'none') continue;
+
+            const prevShadow = pageEl.style.boxShadow; const prevMargin = pageEl.style.margin; const prevBorderRadius = pageEl.style.borderRadius;
+            pageEl.style.boxShadow = 'none'; pageEl.style.margin = '0'; pageEl.style.borderRadius = '0';
+            
+            const canvas = await html2canvas(pageEl, { scale: 2, useCORS: true, logging: false });
+            
+            pageEl.style.boxShadow = prevShadow; pageEl.style.margin = prevMargin; pageEl.style.borderRadius = prevBorderRadius;
+
+            const imgData = canvas.toDataURL('image/jpeg', 0.95);
+            const imgProps = doc.getImageProperties(imgData);
+            const renderedImgHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+            if (!isFirstPage) { doc.addPage(); } else { isFirstPage = false; }
+            doc.addImage(imgData, 'JPEG', 0, 0, pdfWidth, renderedImgHeight);
+        }
+
+        const pdfArrayBuffer = doc.output('arraybuffer');
+        folder.file(safeFileName, pdfArrayBuffer);
+    }
+
+    loadingText.innerHTML = `Membungkus ke dalam ZIP...<br><small style="color:#0d9488;">Proses hampir selesai, mohon tunggu.</small>`;
+    
+    zip.generateAsync({type:"blob"}).then(function(content) {
+        saveAs(content, `${safeFolderName}.zip`);
+        $('#filter-nama').val(originalName).trigger('change');
+        loadingText.innerHTML = "Memuat Data <span id='load-sekolah'></span>...";
+        document.getElementById('loading').style.display = 'none';
+        alert(`✅ Berhasil!\n\nFile ZIP berisi laporan PDF Rapi kelas ${fKelas} telah diunduh.`);
+    });
+ }
+ </script>
+</body>
+</html>
